@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:13.1-alpine
+    container_name: postgres
+    env_file:
+      - database/database.env
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+      - ./database/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:4.23
+    container_name: pgadmin
+    env_file:
+      - database/pgadmin.env
+    ports:
+        - 80:80
+    volumes:
+        - pgadmin:/var/lib/pgadmin
+    depends_on:
+        - postgres
+
+volumes:
+  database-data:
+  pgadmin:
