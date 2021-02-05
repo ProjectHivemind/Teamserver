@@ -1,6 +1,8 @@
 package config
 
-import "github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+import (
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+)
 
 func (d *DatabaseModel) AllStagedActions() ([]model.StagedActions, error) {
 	var allStagedActions []model.StagedActions
@@ -31,4 +33,20 @@ func (d *DatabaseModel) AllStagedActions() ([]model.StagedActions, error) {
 	}
 
 	return allStagedActions, nil
+}
+
+func (d *DatabaseModel) GetStagedActionById(id string) (model.StagedActions, error) {
+	var stagedAction model.StagedActions
+
+	sqlStatement := `SELECT * FROM public."StagedActions" WHERE id=$1`
+
+	row := d.db.QueryRow(sqlStatement, id)
+	err := row.Scan(
+		&stagedAction.Id,
+		&stagedAction.UUIDofAction,
+		&stagedAction.UUIDofImplant,
+		&stagedAction.TimeStaged,
+	)
+
+	return stagedAction, err
 }

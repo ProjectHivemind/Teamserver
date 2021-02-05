@@ -51,9 +51,10 @@ type StagedActions struct {
 }
 
 type StoredActions struct {
-	UUID        string `json:"uuid"`
-	ModuleToRun string `json:"moduletorun"`
-	ModuleFunc  string `json:"modulefunc"`
+	UUID        string   `json:"uuid"`
+	ModuleToRun string   `json:"moduletorun"`
+	ModuleFunc  string   `json:"modulefunc"`
+	Arguments   []string `json:"arguments"`
 }
 
 type ExecutedActions struct {

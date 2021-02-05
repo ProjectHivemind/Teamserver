@@ -33,3 +33,20 @@ func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedActions, error) {
 
 	return allExecutedActions, nil
 }
+
+func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedActions, error) {
+	var executedAction model.ExecutedActions
+
+	sqlStatement := `SELECT * FROM public."ExecutedActions" WHERE id=$1`
+
+	row := d.db.QueryRow(sqlStatement, id)
+	err := row.Scan(
+		&executedAction.Id,
+		&executedAction.UUIDofAction,
+		&executedAction.TimeRan,
+		&executedAction.Successful,
+		&executedAction.ActionResponse,
+	)
+
+	return executedAction, err
+}

@@ -1,6 +1,8 @@
 package config
 
-import "github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+import (
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+)
 
 func (d *DatabaseModel) AllImplantTypes() ([]model.ImplantType, error) {
 	var allImplantTypes []model.ImplantType
@@ -30,4 +32,19 @@ func (d *DatabaseModel) AllImplantTypes() ([]model.ImplantType, error) {
 	}
 
 	return allImplantTypes, nil
+}
+
+func (d *DatabaseModel) GetImplantTypeById(id string) (model.ImplantType, error) {
+	var implantType model.ImplantType
+
+	sqlStatement := `SELECT * FROM public."ImplantType" WHERE UUIDImplantType=$1`
+
+	row := d.db.QueryRow(sqlStatement, id)
+	err := row.Scan(
+		&implantType.UUID,
+		&implantType.ImplantName,
+		&implantType.ImplantVersion,
+	)
+
+	return implantType, err
 }

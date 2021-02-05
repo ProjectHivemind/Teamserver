@@ -1,6 +1,9 @@
 package config
 
-import "github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+import (
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+	"github.com/lib/pq"
+)
 
 func (d *DatabaseModel) AllStoredActions() ([]model.StoredActions, error) {
 	var allStoredActions []model.StoredActions
@@ -21,6 +24,7 @@ func (d *DatabaseModel) AllStoredActions() ([]model.StoredActions, error) {
 			&storedAction.UUID,
 			&storedAction.ModuleToRun,
 			&storedAction.ModuleFunc,
+			pq.Array(&storedAction.Arguments),
 		)
 		if err != nil {
 			return nil, err
@@ -30,4 +34,20 @@ func (d *DatabaseModel) AllStoredActions() ([]model.StoredActions, error) {
 	}
 
 	return allStoredActions, nil
+}
+
+func (d *DatabaseModel) GetStoredActionById(id string) (model.StoredActions, error) {
+	var storedAction model.StoredActions
+
+	sqlStatement := `SELECT * FROM public."StagedActions" WHERE id=$1`
+
+	row := d.db.QueryRow(sqlStatement, id)
+	err := row.Scan(
+		&storedAction.UUID,
+		&storedAction.ModuleToRun,
+		&storedAction.ModuleFunc,
+		pq.Array(&storedAction.Arguments),
+	)
+
+	return storedAction, err
 }

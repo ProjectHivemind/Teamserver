@@ -1,6 +1,8 @@
 package config
 
-import "github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+import (
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+)
 
 func (d *DatabaseModel) AllOperators() ([]model.Operators, error) {
 	var allOperators []model.Operators
@@ -30,4 +32,19 @@ func (d *DatabaseModel) AllOperators() ([]model.Operators, error) {
 	}
 
 	return allOperators, nil
+}
+
+func (d *DatabaseModel) GetOperatorByUsername(username string) (model.Operators, error) {
+	var operator model.Operators
+
+	sqlStatement := `SELECT * FROM public."Operators" WHERE Username=$1`
+
+	row := d.db.QueryRow(sqlStatement, username)
+	err := row.Scan(
+		&operator.Username,
+		&operator.Password,
+		&operator.Permission,
+	)
+
+	return operator, err
 }
