@@ -37,7 +37,7 @@ func (d *DatabaseModel) AllImplantTypes() ([]model.ImplantType, error) {
 func (d *DatabaseModel) GetImplantTypeById(id string) (model.ImplantType, error) {
 	var implantType model.ImplantType
 
-	sqlStatement := `SELECT * FROM public."ImplantType" WHERE UUIDImplantType=$1`
+	sqlStatement := `SELECT * FROM public."ImplantType" WHERE "UUID"=$1`
 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
@@ -47,4 +47,22 @@ func (d *DatabaseModel) GetImplantTypeById(id string) (model.ImplantType, error)
 	)
 
 	return implantType, err
+}
+
+func (d *DatabaseModel) InsertImplantType(implantType model.ImplantType) (bool, error) {
+	sqlStatement := `INSERT INTO public."ImplantType"(
+		"UUID", "ImplantName", "ImplantVersion")
+		VALUES ($1, $2, $3);`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement,
+		implantType.UUID,
+		implantType.ImplantName,
+		implantType.ImplantVersion)
+
+	if err != nil {
+		check = false
+	}
+	return check, err
 }

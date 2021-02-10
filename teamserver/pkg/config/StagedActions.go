@@ -50,3 +50,36 @@ func (d *DatabaseModel) GetStagedActionById(id string) (model.StagedActions, err
 
 	return stagedAction, err
 }
+
+func (d *DatabaseModel) InsertStagedAction(stagedAction model.StagedActions) (bool, error) {
+	sqlStatement := `INSERT INTO public."StagedActions"(
+		id, "UUIDofAction", "UUIDofImplant", "TimeStaged")
+		VALUES ($1, $2, $3, $4);`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement,
+		stagedAction.Id,
+		stagedAction.UUIDofAction,
+		stagedAction.UUIDofImplant,
+		stagedAction.TimeStaged)
+
+	if err != nil {
+		check = false
+	}
+	return check, err
+}
+
+func (d *DatabaseModel) DeleteStagedAction(id int) (bool, error) {
+	sqlStatement := `DELETE FROM public."StagedActions"
+		WHERE id=$1;`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement, id)
+
+	if err != nil {
+		check = false
+	}
+	return check, err
+}

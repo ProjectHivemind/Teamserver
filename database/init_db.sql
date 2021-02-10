@@ -26,8 +26,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public."CallBack" (
     "UUIDImplant" text NOT NULL,
-    "FirstCall" time with time zone NOT NULL,
-    "LastCall" time with time zone
+    "FirstCall" text NOT NULL,
+    "LastCall" text
 );
 
 
@@ -40,7 +40,7 @@ ALTER TABLE public."CallBack" OWNER TO hivemind;
 CREATE TABLE public."ExecutedActions" (
     id text NOT NULL,
     "UUIDofAction" text NOT NULL,
-    "TimeRan" time with time zone NOT NULL,
+    "TimeRan" text NOT NULL,
     "Successful" boolean NOT NULL,
     "ActionResponse" text
 );
@@ -139,7 +139,7 @@ CREATE TABLE public."StagedActions" (
     id integer NOT NULL,
     "UUIDofAction" text NOT NULL,
     "UUIDofImplant" text NOT NULL,
-    "TimeStaged" time with time zone NOT NULL
+    "TimeStaged" text NOT NULL
 );
 
 

@@ -47,3 +47,20 @@ func (d *DatabaseModel) GetModuleByName(name string) (model.Modules, error) {
 
 	return module, err
 }
+
+func (d *DatabaseModel) InsertModule(module model.Modules) (bool, error) {
+	sqlStatement := `INSERT INTO public."Modules"(
+		"ModuleName", "ModuleFuncNames")
+		VALUES ($1, $2);`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement,
+		module.ModuleName,
+		pq.Array(module.ModuleFuncNames))
+
+	if err != nil {
+		check = false
+	}
+	return check, err
+}

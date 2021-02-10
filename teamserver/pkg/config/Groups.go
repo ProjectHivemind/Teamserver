@@ -1,6 +1,8 @@
 package config
 
 import (
+	"errors"
+
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 	"github.com/lib/pq"
 )
@@ -63,4 +65,71 @@ func (d *DatabaseModel) GetGroupByName(name string) (model.Groups, error) {
 	)
 
 	return group, err
+}
+
+func (d *DatabaseModel) AddUUIDToGroup(id string, implantId string) (bool, error) {
+	group, err := d.GetGroupById(id)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = d.GetImplantById(implantId)
+	if err != nil {
+		return false, err
+	}
+
+	group.Implants = append(group.Implants, implantId)
+
+	sqlStatement := `UPDATE public."Groups"
+		SET "Implants"=$2
+		WHERE UUID=$1;`
+
+	check := true
+
+	_, err = d.db.Exec(sqlStatement, id, pq.Array(group.Implants))
+
+	if err != nil {
+		check = false
+	}
+	return check, err
+
+}
+
+func (d *DatabaseModel) RemoveUUIDFromGroup(id string, implantId string) (bool, error) {
+	group, err := d.GetGroupById(id)
+	if err != nil {
+		return false, err
+	}
+
+	idx := -1
+	for i := 0; i < len(group.Implants); i++ {
+		if group.Implants[i] == implantId {
+			idx = i
+		}
+	}
+	if idx == -1 {
+		return false, errors.New("ImplantId not in database")
+	}
+
+	if len(group.Implants) > 1 {
+		group.Implants[len(group.Implants)-1], group.Implants[idx] =
+			group.Implants[idx], group.Implants[len(group.Implants)-1]
+
+		group.Implants = group.Implants[:len(group.Implants)-1]
+	} else {
+		group.Implants = []string{}
+	}
+
+	sqlStatement := `UPDATE public."Groups"
+		SET "Implants"=$2
+		WHERE UUID=$1;`
+
+	check := true
+
+	_, err = d.db.Exec(sqlStatement, id, pq.Array(group.Implants))
+
+	if err != nil {
+		check = false
+	}
+	return check, err
 }

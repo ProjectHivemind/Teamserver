@@ -1,6 +1,10 @@
 package config
 
-import "github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+import (
+	"time"
+
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+)
 
 func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedActions, error) {
 	var allExecutedActions []model.ExecutedActions
@@ -49,4 +53,83 @@ func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedActions,
 	)
 
 	return executedAction, err
+}
+
+func (d *DatabaseModel) InsertExecutedAction(executedAction model.ExecutedActions) (bool, error) {
+	sqlStatement := `INSERT INTO public."ExecutedActions"(
+		id, "UUIDofAction", "TimeRan", "Successful", "ActionResponse")
+		VALUES ($1, $2, $3, $4, $5);`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement,
+		executedAction.Id,
+		executedAction.UUIDofAction,
+		executedAction.TimeRan,
+		executedAction.Successful,
+		executedAction.ActionResponse)
+
+	if err != nil {
+		check = false
+	}
+	return check, err
+}
+
+func (d *DatabaseModel) DeleteExecutedAction(id int) (bool, error) {
+	sqlStatement := `DELETE FROM public."ExecutedActions"
+		WHERE id=$1;`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement, id)
+
+	if err != nil {
+		check = false
+	}
+	return check, err
+}
+
+func (d *DatabaseModel) UpdateExecutedActionResponse(id int, response string) (bool, error) {
+	sqlStatement := `UPDATE public."ExecutedActions"
+		SET "ActionResponse"=$2
+		WHERE id=$1;`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement, id, response)
+
+	if err != nil {
+		check = false
+	}
+	return check, err
+}
+
+func (d *DatabaseModel) UpdateExecutedActionTimeRan(id int, t time.Time) (bool, error) {
+	sqlStatement := `UPDATE public."ExecutedActions"
+		SET "TimeRan"=$2
+		WHERE id=$1;`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement, id, t)
+
+	if err != nil {
+		check = false
+	}
+	return check, err
+}
+
+func (d *DatabaseModel) UpdateExecutedActionSuccessful(id int, successful bool) (bool, error) {
+	sqlStatement := `UPDATE public."ExecutedActions"
+		SET "Successful"=$2
+		WHERE id=$1;`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement, id, successful)
+
+	if err != nil {
+		check = false
+	}
+	return check, err
 }
