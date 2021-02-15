@@ -3,6 +3,7 @@ package config
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -14,6 +15,8 @@ const (
 	PASSWORD = "changeme123"
 	DBNAME   = "hivemind"
 )
+
+const TimeStamp = time.Stamp
 
 type DatabaseModel struct {
 	db *sql.DB

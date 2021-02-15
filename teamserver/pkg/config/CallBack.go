@@ -1,8 +1,6 @@
 package config
 
 import (
-	"time"
-
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 )
 
@@ -11,12 +9,11 @@ func (d *DatabaseModel) GetCallBackById(id string) (model.CallBack, error) {
 
 	sqlStatement := `SELECT * FROM public."CallBack" WHERE "UUIDImplant"=$1`
 
-	var time1, time2 string
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
 		&callBack.UUIDImplant,
-		&time1,
-		&time2,
+		&callBack.FirstCall,
+		&callBack.LastCall,
 	)
 
 	return callBack, err
@@ -31,8 +28,8 @@ func (d *DatabaseModel) InsertCallBack(callBack model.CallBack) (bool, error) {
 
 	_, err := d.db.Exec(sqlStatement,
 		callBack.UUIDImplant,
-		callBack.FirstCall.String(),
-		callBack.LastCall.String())
+		callBack.FirstCall,
+		callBack.LastCall)
 
 	if err != nil {
 		check = false
@@ -40,10 +37,10 @@ func (d *DatabaseModel) InsertCallBack(callBack model.CallBack) (bool, error) {
 	return check, err
 }
 
-func (d *DatabaseModel) UpdateCallBackTime(id string, t time.Time) (bool, error) {
+func (d *DatabaseModel) UpdateCallBackTime(id string, t string) (bool, error) {
 	sqlStatement := `UPDATE public."CallBack"
 		SET "LastCall"=$2
-		WHERE UUIDImplant=$1;`
+		WHERE "UUIDImplant"=$1;`
 
 	check := true
 

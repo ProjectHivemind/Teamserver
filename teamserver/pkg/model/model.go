@@ -20,9 +20,9 @@ type Implant struct {
 }
 
 type CallBack struct {
-	UUIDImplant string    `json:"uuidmplant"`
-	FirstCall   time.Time `json:"firstcall"`
-	LastCall    time.Time `json:"lastcall"`
+	UUIDImplant string `json:"uuidmplant"`
+	FirstCall   string `json:"firstcall"`
+	LastCall    string `json:"lastcall"`
 }
 
 type ModulesFuncs struct {
