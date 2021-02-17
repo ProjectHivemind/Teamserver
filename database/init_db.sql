@@ -97,6 +97,7 @@ ALTER TABLE public."ImplantType" OWNER TO hivemind;
 --
 
 CREATE TABLE public."ModuleFuncs" (
+    "UUID" text NOT NULL,
     "ModuleFuncName" text NOT NULL,
     "NumOfParameters" integer NOT NULL,
     "ParameterTypes" text[] NOT NULL,
@@ -132,11 +133,24 @@ CREATE TABLE public."Operators" (
 ALTER TABLE public."Operators" OWNER TO hivemind;
 
 --
+-- Name: ParamTypes; Type: TABLE; Schema: public; Owner: hivemind
+--
+
+CREATE TABLE public."ParamTypes" (
+    "TypeName" text NOT NULL,
+    "IsComboOption" boolean,
+    "ComboOptions" text[]
+);
+
+
+ALTER TABLE public."ParamTypes" OWNER TO hivemind;
+
+--
 -- Name: StagedActions; Type: TABLE; Schema: public; Owner: hivemind
 --
 
 CREATE TABLE public."StagedActions" (
-    "id" text NOT NULL,
+    id text NOT NULL,
     "UUIDofAction" text NOT NULL,
     "UUIDofImplant" text NOT NULL,
     "TimeStaged" text NOT NULL
@@ -203,7 +217,7 @@ COPY public."ImplantType" ("UUID", "ImplantName", "ImplantVersion") FROM stdin;
 -- Data for Name: ModuleFuncs; Type: TABLE DATA; Schema: public; Owner: hivemind
 --
 
-COPY public."ModuleFuncs" ("ModuleFuncName", "NumOfParameters", "ParameterTypes", "ParameterNames") FROM stdin;
+COPY public."ModuleFuncs" ("UUID", "ModuleFuncName", "NumOfParameters", "ParameterTypes", "ParameterNames") FROM stdin;
 \.
 
 
@@ -224,10 +238,18 @@ COPY public."Operators" ("Username", "Password", "Permission") FROM stdin;
 
 
 --
+-- Data for Name: ParamTypes; Type: TABLE DATA; Schema: public; Owner: hivemind
+--
+
+COPY public."ParamTypes" ("TypeName", "IsComboOption", "ComboOptions") FROM stdin;
+\.
+
+
+--
 -- Data for Name: StagedActions; Type: TABLE DATA; Schema: public; Owner: hivemind
 --
 
-COPY public."StagedActions" ("id", "UUIDofAction", "UUIDofImplant", "TimeStaged") FROM stdin;
+COPY public."StagedActions" (id, "UUIDofAction", "UUIDofImplant", "TimeStaged") FROM stdin;
 \.
 
 
@@ -284,7 +306,7 @@ ALTER TABLE ONLY public."Implant"
 --
 
 ALTER TABLE ONLY public."ModuleFuncs"
-    ADD CONSTRAINT "ModuleFuncs_pkey" PRIMARY KEY ("ModuleFuncName");
+    ADD CONSTRAINT "ModuleFuncs_pkey" PRIMARY KEY ("UUID");
 
 
 --
@@ -304,11 +326,19 @@ ALTER TABLE ONLY public."Operators"
 
 
 --
+-- Name: ParamTypes ParamTypes_pkey; Type: CONSTRAINT; Schema: public; Owner: hivemind
+--
+
+ALTER TABLE ONLY public."ParamTypes"
+    ADD CONSTRAINT "ParamTypes_pkey" PRIMARY KEY ("TypeName");
+
+
+--
 -- Name: StagedActions StagedActions_pkey; Type: CONSTRAINT; Schema: public; Owner: hivemind
 --
 
 ALTER TABLE ONLY public."StagedActions"
-    ADD CONSTRAINT "StagedActions_pkey" PRIMARY KEY ("id");
+    ADD CONSTRAINT "StagedActions_pkey" PRIMARY KEY (id);
 
 
 --
