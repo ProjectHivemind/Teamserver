@@ -1,4 +1,4 @@
-package config
+package crud
 
 import (
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
