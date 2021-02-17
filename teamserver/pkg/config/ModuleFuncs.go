@@ -5,17 +5,17 @@ import (
 	"github.com/lib/pq"
 )
 
-func (d *DatabaseModel) GetModuleFuncById(id string) (model.ModulesFuncs, error) {
+func (d *DatabaseModel) GetModuleFuncByName(id string) (model.ModulesFuncs, error) {
 	var moduleFunc model.ModulesFuncs
 
-	sqlStatement := `SELECT * FROM public."ModuleFuncs" WHERE ModuleFuncName=$1`
+	sqlStatement := `SELECT * FROM public."ModuleFuncs" WHERE "ModuleFuncName"=$1`
 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
 		&moduleFunc.ModuleFuncName,
 		&moduleFunc.NumOfParameters,
-		&moduleFunc.ParameterTypes,
-		&moduleFunc.ParameterNames,
+		pq.Array(&moduleFunc.ParameterTypes),
+		pq.Array(&moduleFunc.ParameterNames),
 	)
 
 	return moduleFunc, err

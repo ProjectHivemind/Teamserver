@@ -37,7 +37,7 @@ func (d *DatabaseModel) AllOperators() ([]model.Operators, error) {
 func (d *DatabaseModel) GetOperatorByUsername(username string) (model.Operators, error) {
 	var operator model.Operators
 
-	sqlStatement := `SELECT * FROM public."Operators" WHERE Username=$1`
+	sqlStatement := `SELECT * FROM public."Operators" WHERE "Username"=$1`
 
 	row := d.db.QueryRow(sqlStatement, username)
 	err := row.Scan(
@@ -69,7 +69,7 @@ func (d *DatabaseModel) InsertOperator(operator model.Operators) (bool, error) {
 
 func (d *DatabaseModel) DeleteOperator(username string) (bool, error) {
 	sqlStatement := `DELETE FROM public."Operators"
-		WHERE Username=$1;`
+		WHERE "Username"=$1;`
 
 	check := true
 
@@ -84,7 +84,7 @@ func (d *DatabaseModel) DeleteOperator(username string) (bool, error) {
 func (d *DatabaseModel) ChangeOperatorPassword(username string, password string) (bool, error) {
 	sqlStatement := `UPDATE public."Operators"
 		SET "Password"=$2
-		WHERE Username=$1;`
+		WHERE "Username"=$1;`
 
 	check := true
 
@@ -99,7 +99,7 @@ func (d *DatabaseModel) ChangeOperatorPassword(username string, password string)
 func (d *DatabaseModel) ChangeOperatorPermission(username string, permission int) (bool, error) {
 	sqlStatement := `UPDATE public."Operators"
 		SET "Permission"=$2
-		WHERE Username=$1;`
+		WHERE "Username"=$1;`
 
 	check := true
 

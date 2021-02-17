@@ -1,8 +1,6 @@
 package config
 
 import (
-	"time"
-
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 )
 
@@ -41,7 +39,7 @@ func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedActions, error) {
 func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedActions, error) {
 	var executedAction model.ExecutedActions
 
-	sqlStatement := `SELECT * FROM public."ExecutedActions" WHERE id=$1`
+	sqlStatement := `SELECT * FROM public."ExecutedActions" WHERE "id"=$1`
 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
@@ -75,9 +73,9 @@ func (d *DatabaseModel) InsertExecutedAction(executedAction model.ExecutedAction
 	return check, err
 }
 
-func (d *DatabaseModel) DeleteExecutedAction(id int) (bool, error) {
+func (d *DatabaseModel) DeleteExecutedAction(id string) (bool, error) {
 	sqlStatement := `DELETE FROM public."ExecutedActions"
-		WHERE id=$1;`
+		WHERE "id"=$1;`
 
 	check := true
 
@@ -89,10 +87,10 @@ func (d *DatabaseModel) DeleteExecutedAction(id int) (bool, error) {
 	return check, err
 }
 
-func (d *DatabaseModel) UpdateExecutedActionResponse(id int, response string) (bool, error) {
+func (d *DatabaseModel) UpdateExecutedActionResponse(id string, response string) (bool, error) {
 	sqlStatement := `UPDATE public."ExecutedActions"
 		SET "ActionResponse"=$2
-		WHERE id=$1;`
+		WHERE "id"=$1;`
 
 	check := true
 
@@ -104,10 +102,10 @@ func (d *DatabaseModel) UpdateExecutedActionResponse(id int, response string) (b
 	return check, err
 }
 
-func (d *DatabaseModel) UpdateExecutedActionTimeRan(id int, t time.Time) (bool, error) {
+func (d *DatabaseModel) UpdateExecutedActionTimeRan(id string, t string) (bool, error) {
 	sqlStatement := `UPDATE public."ExecutedActions"
 		SET "TimeRan"=$2
-		WHERE id=$1;`
+		WHERE "id"=$1;`
 
 	check := true
 
@@ -119,10 +117,10 @@ func (d *DatabaseModel) UpdateExecutedActionTimeRan(id int, t time.Time) (bool, 
 	return check, err
 }
 
-func (d *DatabaseModel) UpdateExecutedActionSuccessful(id int, successful bool) (bool, error) {
+func (d *DatabaseModel) UpdateExecutedActionSuccessful(id string, successful bool) (bool, error) {
 	sqlStatement := `UPDATE public."ExecutedActions"
 		SET "Successful"=$2
-		WHERE id=$1;`
+		WHERE "id"=$1;`
 
 	check := true
 

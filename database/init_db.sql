@@ -136,7 +136,7 @@ ALTER TABLE public."Operators" OWNER TO hivemind;
 --
 
 CREATE TABLE public."StagedActions" (
-    id integer NOT NULL,
+    "id" text NOT NULL,
     "UUIDofAction" text NOT NULL,
     "UUIDofImplant" text NOT NULL,
     "TimeStaged" text NOT NULL
@@ -227,7 +227,7 @@ COPY public."Operators" ("Username", "Password", "Permission") FROM stdin;
 -- Data for Name: StagedActions; Type: TABLE DATA; Schema: public; Owner: hivemind
 --
 
-COPY public."StagedActions" (id, "UUIDofAction", "UUIDofImplant", "TimeStaged") FROM stdin;
+COPY public."StagedActions" ("id", "UUIDofAction", "UUIDofImplant", "TimeStaged") FROM stdin;
 \.
 
 
@@ -308,7 +308,7 @@ ALTER TABLE ONLY public."Operators"
 --
 
 ALTER TABLE ONLY public."StagedActions"
-    ADD CONSTRAINT "StagedActions_pkey" PRIMARY KEY (id);
+    ADD CONSTRAINT "StagedActions_pkey" PRIMARY KEY ("id");
 
 
 --

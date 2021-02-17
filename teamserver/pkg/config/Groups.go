@@ -40,7 +40,7 @@ func (d *DatabaseModel) AllGroups() ([]model.Groups, error) {
 func (d *DatabaseModel) GetGroupById(id string) (model.Groups, error) {
 	var group model.Groups
 
-	sqlStatement := `SELECT * FROM public."Groups" WHERE UUID=$1`
+	sqlStatement := `SELECT * FROM public."Groups" WHERE "UUID"=$1`
 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
@@ -55,7 +55,7 @@ func (d *DatabaseModel) GetGroupById(id string) (model.Groups, error) {
 func (d *DatabaseModel) GetGroupByName(name string) (model.Groups, error) {
 	var group model.Groups
 
-	sqlStatement := `SELECT * FROM public."Groups" WHERE GroupName=$1`
+	sqlStatement := `SELECT * FROM public."Groups" WHERE "GroupName"=$1`
 
 	row := d.db.QueryRow(sqlStatement, name)
 	err := row.Scan(
@@ -65,6 +65,23 @@ func (d *DatabaseModel) GetGroupByName(name string) (model.Groups, error) {
 	)
 
 	return group, err
+}
+
+func (d *DatabaseModel) InsertGroup(group model.Groups) (bool, error) {
+	sqlStatement := `INSERT INTO public."Groups"(
+		"UUID", "GroupName")
+		VALUES ($1, $2);`
+
+	check := true
+
+	_, err := d.db.Exec(sqlStatement,
+		group.UUID,
+		group.GroupName)
+
+	if err != nil {
+		check = false
+	}
+	return check, err
 }
 
 func (d *DatabaseModel) AddUUIDToGroup(id string, implantId string) (bool, error) {
@@ -82,7 +99,7 @@ func (d *DatabaseModel) AddUUIDToGroup(id string, implantId string) (bool, error
 
 	sqlStatement := `UPDATE public."Groups"
 		SET "Implants"=$2
-		WHERE UUID=$1;`
+		WHERE "UUID"=$1;`
 
 	check := true
 
@@ -122,7 +139,7 @@ func (d *DatabaseModel) RemoveUUIDFromGroup(id string, implantId string) (bool, 
 
 	sqlStatement := `UPDATE public."Groups"
 		SET "Implants"=$2
-		WHERE UUID=$1;`
+		WHERE "UUID"=$1;`
 
 	check := true
 

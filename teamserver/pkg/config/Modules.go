@@ -37,7 +37,7 @@ func (d *DatabaseModel) AllModules() ([]model.Modules, error) {
 func (d *DatabaseModel) GetModuleByName(name string) (model.Modules, error) {
 	var module model.Modules
 
-	sqlStatement := `SELECT * FROM public."Modules" WHERE ModuleName=$1`
+	sqlStatement := `SELECT * FROM public."Modules" WHERE "ModuleName"=$1`
 
 	row := d.db.QueryRow(sqlStatement, name)
 	err := row.Scan(

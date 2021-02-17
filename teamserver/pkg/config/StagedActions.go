@@ -38,7 +38,7 @@ func (d *DatabaseModel) AllStagedActions() ([]model.StagedActions, error) {
 func (d *DatabaseModel) GetStagedActionById(id string) (model.StagedActions, error) {
 	var stagedAction model.StagedActions
 
-	sqlStatement := `SELECT * FROM public."StagedActions" WHERE id=$1`
+	sqlStatement := `SELECT * FROM public."StagedActions" WHERE "id"=$1`
 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
@@ -53,12 +53,17 @@ func (d *DatabaseModel) GetStagedActionById(id string) (model.StagedActions, err
 
 func (d *DatabaseModel) InsertStagedAction(stagedAction model.StagedActions) (bool, error) {
 	sqlStatement := `INSERT INTO public."StagedActions"(
-		id, "UUIDofAction", "UUIDofImplant", "TimeStaged")
+		"id", "UUIDofAction", "UUIDofImplant", "TimeStaged")
 		VALUES ($1, $2, $3, $4);`
 
 	check := true
 
-	_, err := d.db.Exec(sqlStatement,
+	_, err := d.GetImplantById(stagedAction.UUIDofImplant)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = d.db.Exec(sqlStatement,
 		stagedAction.Id,
 		stagedAction.UUIDofAction,
 		stagedAction.UUIDofImplant,
@@ -70,9 +75,9 @@ func (d *DatabaseModel) InsertStagedAction(stagedAction model.StagedActions) (bo
 	return check, err
 }
 
-func (d *DatabaseModel) DeleteStagedAction(id int) (bool, error) {
+func (d *DatabaseModel) DeleteStagedAction(id string) (bool, error) {
 	sqlStatement := `DELETE FROM public."StagedActions"
-		WHERE id=$1;`
+		WHERE "id"=$1;`
 
 	check := true
 

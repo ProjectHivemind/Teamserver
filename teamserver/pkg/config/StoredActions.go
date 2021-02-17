@@ -39,7 +39,7 @@ func (d *DatabaseModel) AllStoredActions() ([]model.StoredActions, error) {
 func (d *DatabaseModel) GetStoredActionById(id string) (model.StoredActions, error) {
 	var storedAction model.StoredActions
 
-	sqlStatement := `SELECT * FROM public."StagedActions" WHERE id=$1`
+	sqlStatement := `SELECT * FROM public."StoredActions" WHERE "UUID"=$1`
 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
@@ -73,7 +73,7 @@ func (d *DatabaseModel) InsertStoredAction(storedAction model.StoredActions) (bo
 
 func (d *DatabaseModel) DeleteStoredAction(id string) (bool, error) {
 	sqlStatement := `DELETE FROM public."StoredActions"
-		WHERE UUID=$1;`
+		WHERE "UUID"=$1;`
 
 	check := true
 

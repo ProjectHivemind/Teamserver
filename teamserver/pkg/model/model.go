@@ -1,7 +1,5 @@
 package model
 
-import "time"
-
 type ImplantType struct {
 	UUID           string `json:"uuid"`
 	ImplantName    string `json:"implantname"`
@@ -44,10 +42,10 @@ type Groups struct {
 }
 
 type StagedActions struct {
-	Id            int       `json:"id"`
-	UUIDofAction  string    `json:"uuidofaction"`
-	UUIDofImplant string    `json:"uuidofimplant"`
-	TimeStaged    time.Time `json:"timestaged"`
+	Id            string `json:"id"`
+	UUIDofAction  string `json:"uuidofaction"`
+	UUIDofImplant string `json:"uuidofimplant"`
+	TimeStaged    string `json:"timestaged"`
 }
 
 type StoredActions struct {
@@ -58,7 +56,7 @@ type StoredActions struct {
 }
 
 type ExecutedActions struct {
-	Id             int    `json:"id"`
+	Id             string `json:"id"`
 	UUIDofAction   string `json:"uuidofaction"`
 	TimeRan        string `json:"timeran"`
 	Successful     bool   `json:"successful"`
