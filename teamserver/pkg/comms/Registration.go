@@ -129,18 +129,18 @@ func ModuleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 		if err != nil {
 
 			var moduleFuncs []model.ModulesFuncs
-			moduleFuncNames := []string{}
+			moduleFuncIds := []string{}
 			for j := 0; j < len(newModules[i].ModuleFuncs); j++ {
 				newFunc, _ := GenerateModuleFunc(newModules[i].ModuleFuncs[j])
 				moduleFuncs = append(moduleFuncs, newFunc)
-				moduleFuncNames = append(moduleFuncNames, newFunc.ModuleFuncName)
+				moduleFuncIds = append(moduleFuncIds, newFunc.UUID)
 			}
 
 			// Insert the module after running checks
 			module := model.Modules{
-				ModuleName:      name,
-				ModuleDesc:      newModules[i].ModuleDesc,
-				ModuleFuncNames: moduleFuncNames,
+				ModuleName:    name,
+				ModuleDesc:    newModules[i].ModuleDesc,
+				ModuleFuncIds: moduleFuncIds,
 			}
 			check, err := d.InsertModule(module)
 			if err != nil {

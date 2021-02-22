@@ -115,7 +115,7 @@ ALTER TABLE public."ModuleFuncs" OWNER TO hivemind;
 CREATE TABLE public."Modules" (
     "ModuleName" text NOT NULL,
     "ModuleDesc" text NOT NULL,
-    "ModuleFuncNames" text[] NOT NULL
+    "ModuleFuncIds" text[] NOT NULL
 );
 
 
@@ -227,7 +227,7 @@ COPY public."ModuleFuncs" ("UUID", "ModuleFuncName", "NumOfParameters", "Paramet
 -- Data for Name: Modules; Type: TABLE DATA; Schema: public; Owner: hivemind
 --
 
-COPY public."Modules" ("ModuleName", "ModuleFuncNames") FROM stdin;
+COPY public."Modules" ("ModuleName", "ModuleFuncIds") FROM stdin;
 \.
 
 

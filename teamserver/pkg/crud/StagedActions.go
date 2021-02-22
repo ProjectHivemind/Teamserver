@@ -54,9 +54,9 @@ func (d *DatabaseModel) GetStagedActionById(id string) (model.StagedActions, err
 func (d *DatabaseModel) GetStagedActionByImplant(id string) ([]model.StagedActions, error) {
 	var allStagedActions []model.StagedActions
 
-	sqlStatement := `SELECT * FROM public."StagedActions" WHERE "UUIDofImplant=$1`
+	sqlStatement := `SELECT * FROM public."StagedActions" WHERE "UUIDofImplant"=$1`
 
-	rows, err := d.db.Query(sqlStatement)
+	rows, err := d.db.Query(sqlStatement, id)
 	if err != nil {
 		return nil, err
 	}

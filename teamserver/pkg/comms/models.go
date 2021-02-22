@@ -26,7 +26,7 @@ const (
 // NumLeft is how many more packets are coming in
 // Data is one of the following structs
 type Packet struct {
-	Fingerprint string      `json:"fingerPrint"`
+	Fingerprint string      `json:"fingerprint"`
 	Implant     ImplantInfo `json:"implantInfo"`
 	PacketType  int         `json:"packetType"`
 	NumLeft     int         `json:"numLeft"`
@@ -35,16 +35,16 @@ type Packet struct {
 
 // ImplantInfo is the information about the implant being sent
 type ImplantInfo struct {
-	UUID      string `json:"uuid"`
+	UUID      string `json:"UUID"`
 	PrimaryIP string `json:"primaryIP"`
 }
 
 // Action is the action that needs to be completed
 type Action struct {
-	ActionID   string   `json:"actionId"`
-	Module     string   `json:"module"`
-	ModuleFunc string   `json:"moduleFunc"`
-	Arguments  []string `json:"arguments"`
+	ActionID   string `json:"actionId"`
+	Module     string `json:"module"`
+	ModuleFunc string `json:"moduleFunc"`
+	Arguments  string `json:"arguments"`
 }
 
 // ActionResponse is the implant's response to an action
@@ -67,7 +67,7 @@ type RegistrationRequest struct {
 
 // RegistrationResponse gives the uuid to the bot
 type RegistrationResponse struct {
-	UUID string `json:"uuid"`
+	UUID string `json:"UUID"`
 }
 
 // ModuleInfo has the name of the module from the implant with funcs
