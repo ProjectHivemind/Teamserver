@@ -156,22 +156,15 @@ func ModuleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 				var moduleFuncs []model.ModulesFuncs
 				moduleFuncNames := []string{}
 				for j := 0; j < len(newModules[i].ModuleFuncs); j++ {
-					tmpFunc := newModules[i].ModuleFuncs[j]
-
-					newFunc := model.ModulesFuncs{
-						UUID:            uuid.New().String(),
-						ModuleFuncName:  tmpFunc.ModuleFuncName,
-						NumOfParameters: tmpFunc.ParamNum,
-						ParameterTypes:  tmpFunc.ParamTypes,
-						ParameterNames:  tmpFunc.ParamNames,
-					}
+					newFunc, _ := GenerateModuleFunc(newModules[i].ModuleFuncs[j])
 					moduleFuncs = append(moduleFuncs, newFunc)
-					moduleFuncNames = append(moduleFuncNames, tmpFunc.ModuleFuncName)
+					moduleFuncNames = append(moduleFuncNames, newFunc.ModuleFuncName)
 				}
 
 				// Insert the module after running checks
 				module := model.Modules{
 					ModuleName:      name,
+					ModuleDesc:      newModules[i].ModuleDesc,
 					ModuleFuncNames: moduleFuncNames,
 				}
 				check, err := d.InsertModule(module)
@@ -196,6 +189,19 @@ func ModuleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 	}
 
 	return moduleStr, nil
+}
+
+func GenerateModuleFunc(moduleFunc ModuleFuncInfo) (model.ModulesFuncs, error) {
+	newModuleFunc := model.ModulesFuncs{
+		UUID:            uuid.New().String(),
+		ModuleFuncName:  moduleFunc.ModuleFuncName,
+		ModuleFuncDesc:  moduleFunc.ModuleFuncDesc,
+		NumOfParameters: moduleFunc.ParamNum,
+		ParameterTypes:  moduleFunc.ParamTypes,
+		ParameterNames:  moduleFunc.ParamNames,
+	}
+
+	return newModuleFunc, nil
 }
 
 // ErrorHandler converts the error into the enum value
