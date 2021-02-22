@@ -62,18 +62,26 @@ type RegistrationRequest struct {
 	MAC              string       `json:"MAC"`
 	OtherIPs         []string     `json:"otherips"`
 	OS               string       `json:"OS"`
-	SupportedModules []ModuleInfo `json:"supportedModules"`
+	SupportedModules []ModuleInfo `json:"sup
+	portedModules"`
+}
+
+// RegistrationResponse gives the uuid to the bot
+type RegistrationResponse struct {
+	UUID string `json:"uuid"`
 }
 
 // ModuleInfo has the name of the module from the implant with funcs
 type ModuleInfo struct {
 	ModuleName  string           `json:"moduleName"`
+	ModuleDesc  string           `json:"moduleDesc"`
 	ModuleFuncs []ModuleFuncInfo `json:"moduleFuncs"`
 }
 
 // ModuleFuncInfo has all the information about a module function
 type ModuleFuncInfo struct {
 	ModuleFuncName string   `json:"moduleFuncName"`
+	ModuleFuncDesc string   `json:"moduleFuncDesc"`
 	ParamNum       int      `json:"paramNum"`
 	ParamNames     []string `json:"paramNames"`
 	ParamTypes     []string `json:"paramTypes"`

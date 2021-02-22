@@ -97,6 +97,9 @@ func RegisterRequestHandler(packet Packet) ([]Packet, error) {
 	}
 
 	if success {
+		resp := RegistrationResponse{UUID: implant.UUID}
+		bytes, _ := json.Marshal(resp)
+
 		respPacket := Packet{
 			Fingerprint: "123456789",
 			Implant: ImplantInfo{
@@ -105,7 +108,7 @@ func RegisterRequestHandler(packet Packet) ([]Packet, error) {
 			},
 			PacketType: 5,
 			NumLeft:    0,
-			Data:       "",
+			Data:       string(bytes),
 		}
 		allPackets = append(allPackets, respPacket)
 	} else if !success {
@@ -154,6 +157,7 @@ func ModuleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 				moduleFuncNames := []string{}
 				for j := 0; j < len(newModules[i].ModuleFuncs); j++ {
 					tmpFunc := newModules[i].ModuleFuncs[j]
+
 					newFunc := model.ModulesFuncs{
 						UUID:            uuid.New().String(),
 						ModuleFuncName:  tmpFunc.ModuleFuncName,
