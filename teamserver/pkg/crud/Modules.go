@@ -18,17 +18,18 @@ func (d *DatabaseModel) AllModules() ([]model.Modules, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var model model.Modules
+		var module model.Modules
 
 		err = rows.Scan(
-			&model.ModuleName,
-			pq.Array(&model.ModuleFuncNames),
+			&module.ModuleName,
+			&module.ModuleDesc,
+			pq.Array(&module.ModuleFuncNames),
 		)
 		if err != nil {
 			return nil, err
 		}
 
-		allModules = append(allModules, model)
+		allModules = append(allModules, module)
 	}
 
 	return allModules, nil
@@ -42,6 +43,7 @@ func (d *DatabaseModel) GetModuleByName(name string) (model.Modules, error) {
 	row := d.db.QueryRow(sqlStatement, name)
 	err := row.Scan(
 		&module.ModuleName,
+		&module.ModuleDesc,
 		pq.Array(&module.ModuleFuncNames),
 	)
 
@@ -50,13 +52,14 @@ func (d *DatabaseModel) GetModuleByName(name string) (model.Modules, error) {
 
 func (d *DatabaseModel) InsertModule(module model.Modules) (bool, error) {
 	sqlStatement := `INSERT INTO public."Modules"(
-		"ModuleName", "ModuleFuncNames")
-		VALUES ($1, $2);`
+		"ModuleName", "ModuleDesc", "ModuleFuncNames")
+		VALUES ($1, $2, $3);`
 
 	check := true
 
 	_, err := d.db.Exec(sqlStatement,
 		module.ModuleName,
+		module.ModuleDesc,
 		pq.Array(module.ModuleFuncNames))
 
 	if err != nil {
