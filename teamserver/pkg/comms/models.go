@@ -41,7 +41,7 @@ type ImplantInfo struct {
 
 // Action is the action that needs to be completed
 type Action struct {
-	ActionID   int      `json:"actionId"`
+	ActionID   string   `json:"actionId"`
 	Module     string   `json:"module"`
 	ModuleFunc string   `json:"moduleFunc"`
 	Arguments  []string `json:"arguments"`
@@ -49,7 +49,7 @@ type Action struct {
 
 // ActionResponse is the implant's response to an action
 type ActionResponse struct {
-	ActionID int    `json:"actionId"`
+	ActionID string `json:"actionId"`
 	Response string `json:"response"`
 }
 
@@ -62,8 +62,7 @@ type RegistrationRequest struct {
 	MAC              string       `json:"MAC"`
 	OtherIPs         []string     `json:"otherips"`
 	OS               string       `json:"OS"`
-	SupportedModules []ModuleInfo `json:"sup
-	portedModules"`
+	SupportedModules []ModuleInfo `json:"supportedModules"`
 }
 
 // RegistrationResponse gives the uuid to the bot
