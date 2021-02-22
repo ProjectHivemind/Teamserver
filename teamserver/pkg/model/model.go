@@ -26,6 +26,7 @@ type CallBack struct {
 type ModulesFuncs struct {
 	UUID            string   `json:"uuid"`
 	ModuleFuncName  string   `json:"modulefuncname"`
+	ModuleFuncDesc  string   `json:"modulefuncdesc"`
 	NumOfParameters int      `json:"numofparamenters"`
 	ParameterTypes  []string `json:"parametertypes"`
 	ParameterNames  []string `json:"parameternames"`
@@ -33,6 +34,7 @@ type ModulesFuncs struct {
 
 type Modules struct {
 	ModuleName      string   `json:"modulename"`
+	ModuleDesc      string   `json:"moduledesc"`
 	ModuleFuncNames []string `json:"modulefuncnames"`
 }
 

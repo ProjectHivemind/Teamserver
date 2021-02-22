@@ -14,6 +14,7 @@ func (d *DatabaseModel) GetModuleFuncById(id string) (model.ModulesFuncs, error)
 	err := row.Scan(
 		&moduleFunc.UUID,
 		&moduleFunc.ModuleFuncName,
+		&moduleFunc.ModuleFuncDesc,
 		&moduleFunc.NumOfParameters,
 		pq.Array(&moduleFunc.ParameterTypes),
 		pq.Array(&moduleFunc.ParameterNames),
@@ -24,14 +25,15 @@ func (d *DatabaseModel) GetModuleFuncById(id string) (model.ModulesFuncs, error)
 
 func (d *DatabaseModel) InsertModuleFunc(moduleFunc model.ModulesFuncs) (bool, error) {
 	sqlStatement := `INSERT INTO public."ModuleFuncs"(
-		"UUID", "ModuleFuncName", "NumOfParameters", "ParameterTypes", "ParameterNames")
-		VALUES ($1, $2, $3, $4, $5);`
+		"UUID", "ModuleFuncName", "ModuleFuncDesc", "NumOfParameters", "ParameterTypes", "ParameterNames")
+		VALUES ($1, $2, $3, $4, $5, $6);`
 
 	check := true
 
 	_, err := d.db.Exec(sqlStatement,
 		moduleFunc.UUID,
 		moduleFunc.ModuleFuncName,
+		moduleFunc.ModuleFuncDesc,
 		moduleFunc.NumOfParameters,
 		pq.Array(moduleFunc.ParameterTypes),
 		pq.Array(moduleFunc.ParameterNames))

@@ -38,7 +38,7 @@ ALTER TABLE public."CallBack" OWNER TO hivemind;
 --
 
 CREATE TABLE public."ExecutedActions" (
-    id text NOT NULL,
+    "id" text NOT NULL,
     "UUIDofAction" text NOT NULL,
     "TimeRan" text NOT NULL,
     "Successful" boolean NOT NULL,
@@ -99,6 +99,7 @@ ALTER TABLE public."ImplantType" OWNER TO hivemind;
 CREATE TABLE public."ModuleFuncs" (
     "UUID" text NOT NULL,
     "ModuleFuncName" text NOT NULL,
+    "ModuleFuncDesc" text NOT NULL,
     "NumOfParameters" integer NOT NULL,
     "ParameterTypes" text[] NOT NULL,
     "ParameterNames" text[] NOT NULL
@@ -113,6 +114,7 @@ ALTER TABLE public."ModuleFuncs" OWNER TO hivemind;
 
 CREATE TABLE public."Modules" (
     "ModuleName" text NOT NULL,
+    "ModuleDesc" text NOT NULL,
     "ModuleFuncNames" text[] NOT NULL
 );
 
