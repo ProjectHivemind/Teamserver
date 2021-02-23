@@ -37,13 +37,7 @@ func handleConnection(conn net.Conn) {
 	msg := make([]byte, 8096)
 	n, _ := conn.Read(msg)
 
-	var packet comms.Packet
-	if err := json.Unmarshal(msg[:n], &packet); err != nil {
-		fmt.Print(err)
-		return
-	}
-
-	allPackets, err := comms.HandleMessage(packet)
+	allPackets, err := comms.HandleMessage(msg[:n])
 	if err != nil {
 		fmt.Println(err)
 		return

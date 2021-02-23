@@ -1,11 +1,18 @@
 package comms
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
 // HandleMessage takes the packet and decides what to do with it
-func HandleMessage(packet Packet) ([]Packet, error) {
+func HandleMessage(packetBytes []byte) ([]Packet, error) {
+	var packet Packet
+	if err := json.Unmarshal(packetBytes, &packet); err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("error parsing packet")
+	}
+
 	switch packet.PacketType {
 	case ActionRequestEnum:
 		return ActionRequestHandler(packet)
@@ -14,9 +21,27 @@ func HandleMessage(packet Packet) ([]Packet, error) {
 	case RegisterRequestEnum:
 		return RegisterRequestHandler(packet)
 	default:
-		break
+		return nil, fmt.Errorf("no a valid PacketType")
 	}
-	return nil, fmt.Errorf("no a valid PacketType")
+
+	// get up to send bytes back by looping through the packets
+
+}
+
+// Creates an error packet with the implant info and commerror struct
+func CreateErrorPacket(implant ImplantInfo, commErr ComError) (Packet, error) {
+
+	bytes, _ := json.Marshal(commErr)
+
+	packet := Packet{
+		Fingerprint: "fingerprint",
+		Implant:     implant,
+		PacketType:  ComErrorEnum,
+		NumLeft:     0,
+		Data:        string(bytes),
+	}
+
+	return packet, nil
 }
 
 // ErrorHandler converts the error into the enum value

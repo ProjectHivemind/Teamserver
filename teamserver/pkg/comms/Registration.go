@@ -176,3 +176,19 @@ func GenerateModuleFunc(moduleFunc ModuleFuncInfo) (model.ModulesFuncs, error) {
 
 	return newModuleFunc, nil
 }
+
+func CreateErrorPacket(implant ImplantInfo, commErr ComError) (Packet, error) {
+
+	packet := Packet{
+		Fingerprint: "fingerprint",
+		Implant: ImplantInfo{
+			UUID:      "",
+			PrimaryIP: register.IP,
+		},
+		PacketType: ComErrorEnum,
+		NumLeft:    0,
+		Data:       string(bytes),
+	}
+
+	return
+}
