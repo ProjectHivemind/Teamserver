@@ -33,9 +33,9 @@ type ModulesFuncs struct {
 }
 
 type Modules struct {
-	ModuleName      string   `json:"modulename"`
-	ModuleDesc      string   `json:"moduledesc"`
-	ModuleFuncNames []string `json:"modulefuncnames"`
+	ModuleName    string   `json:"modulename"`
+	ModuleDesc    string   `json:"moduledesc"`
+	ModuleFuncIds []string `json:"modulefuncnames"`
 }
 
 type ParamType struct {

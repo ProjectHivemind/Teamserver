@@ -35,7 +35,7 @@ func (d *DatabaseModel) Open() {
 
 	err = d.db.Ping()
 	if err != nil {
-		panic(err)
+		return
 	}
 }
 

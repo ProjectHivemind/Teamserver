@@ -23,7 +23,7 @@ func (d *DatabaseModel) AllModules() ([]model.Modules, error) {
 		err = rows.Scan(
 			&module.ModuleName,
 			&module.ModuleDesc,
-			pq.Array(&module.ModuleFuncNames),
+			pq.Array(&module.ModuleFuncIds),
 		)
 		if err != nil {
 			return nil, err
@@ -44,7 +44,7 @@ func (d *DatabaseModel) GetModuleByName(name string) (model.Modules, error) {
 	err := row.Scan(
 		&module.ModuleName,
 		&module.ModuleDesc,
-		pq.Array(&module.ModuleFuncNames),
+		pq.Array(&module.ModuleFuncIds),
 	)
 
 	return module, err
@@ -52,7 +52,7 @@ func (d *DatabaseModel) GetModuleByName(name string) (model.Modules, error) {
 
 func (d *DatabaseModel) InsertModule(module model.Modules) (bool, error) {
 	sqlStatement := `INSERT INTO public."Modules"(
-		"ModuleName", "ModuleDesc", "ModuleFuncNames")
+		"ModuleName", "ModuleDesc", "ModuleFuncIds")
 		VALUES ($1, $2, $3);`
 
 	check := true
@@ -60,7 +60,7 @@ func (d *DatabaseModel) InsertModule(module model.Modules) (bool, error) {
 	_, err := d.db.Exec(sqlStatement,
 		module.ModuleName,
 		module.ModuleDesc,
-		pq.Array(module.ModuleFuncNames))
+		pq.Array(module.ModuleFuncIds))
 
 	if err != nil {
 		check = false
