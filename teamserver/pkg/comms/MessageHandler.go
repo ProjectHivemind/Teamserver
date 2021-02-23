@@ -9,7 +9,7 @@ import (
 func HandleMessage(packetBytes []byte) ([]byte, error) {
 	var packet Packet
 	if err := json.Unmarshal(packetBytes, &packet); err != nil {
-		fmt.Print(err)
+		fmt.Println(err)
 		return nil, fmt.Errorf("error parsing packet")
 	}
 
