@@ -24,19 +24,9 @@ func ActionResponseHandler(packet Packet) ([]Packet, error) {
 
 	_, err = d.GetExecutedActionById(actionResp.ActionID)
 	if err != nil {
-		commErr := ComError{
-			ActionID: "-1",
-			ErrorNum: ErrorHandler(err),
-		}
-		bytes, _ := json.Marshal(commErr)
-
-		errPacket := Packet{
-			Fingerprint: "fingerprint",
-			Implant:     packet.Implant,
-			PacketType:  ComErrorEnum,
-			NumLeft:     0,
-			Data:        string(bytes),
-		}
+		errPacket, _ := CreateErrorPacket(
+			packet.Implant,
+			ComError{ActionID: "-1", ErrorNum: ErrorHandler(err)})
 
 		allPackets = append(allPackets, errPacket)
 		return allPackets, err

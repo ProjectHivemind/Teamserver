@@ -95,6 +95,41 @@ func (d *DatabaseModel) GetImplantByType(id string) ([]model.Implant, error) {
 	return allImplants, nil
 }
 
+func (d *DatabaseModel) GetImplantByIp(id string) ([]model.Implant, error) {
+	var allImplants []model.Implant
+
+	sqlStatement := `SELECT * FROM public."Implant" WHERE "PrimaryIP"=$1`
+
+	rows, err := d.db.Query(sqlStatement, id)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var implant model.Implant
+
+		err = rows.Scan(
+			&implant.UUID,
+			&implant.UUIDImplantType,
+			&implant.PrimaryIP,
+			&implant.Hostname,
+			&implant.MAC,
+			&implant.ImplantOS,
+			pq.Array(&implant.OtherIPs),
+			pq.Array(&implant.SupportedModules),
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		allImplants = append(allImplants, implant)
+	}
+
+	return allImplants, nil
+}
+
 func (d *DatabaseModel) InsertImplant(implant model.Implant) (bool, error) {
 	sqlStatement := `INSERT INTO public."Implant"(
 		"UUID",

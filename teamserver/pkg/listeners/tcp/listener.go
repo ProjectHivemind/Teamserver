@@ -1,7 +1,6 @@
 package tcp
 
 import (
-	"encoding/json"
 	"fmt"
 	"net"
 
@@ -25,7 +24,7 @@ func StartListener(port string) {
 		conn, err := listener.Accept()
 		if err != nil {
 			fmt.Println(err)
-			return
+			continue
 		}
 
 		go handleConnection(conn)
@@ -34,20 +33,15 @@ func StartListener(port string) {
 
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
-	msg := make([]byte, 8096)
+	msg := make([]byte, 9000)
 	n, _ := conn.Read(msg)
 
-	allPackets, err := comms.HandleMessage(msg[:n])
+	bytes, err := comms.HandleMessage(msg[:n])
 	if err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
 		return
 	}
 
-	if len(allPackets) > 0 {
-		for i := 0; i < len(allPackets); i++ {
-			tmp, _ := json.Marshal(allPackets[i])
-			conn.Write(tmp)
-		}
-	}
+	conn.Write(bytes)
 
 }
