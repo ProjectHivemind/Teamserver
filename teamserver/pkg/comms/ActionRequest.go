@@ -46,15 +46,10 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 		return allPackets, nil
 	}
 
-	// packetCtr := len(stagedActions)
 	for i := 0; i < len(stagedActions); i++ {
-		// if packetCtr == 0 {
-		// 	break
-		// }
 
 		action, err := generateAction(stagedActions[i])
 		if err != nil {
-			// packetCtr--
 			continue
 		}
 
@@ -74,11 +69,9 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 		// MOVE STAGED TO EXECUTED HERE
 		d.DeleteStagedAction(stagedActions[i].Id)
 		executed := model.ExecutedActions{
-			Id:             stagedActions[i].Id,
-			UUIDofAction:   stagedActions[i].UUIDofAction,
-			TimeRan:        "",
-			Successful:     false,
-			ActionResponse: "",
+			Id:           stagedActions[i].Id,
+			UUIDofAction: stagedActions[i].UUIDofAction,
+			TimeSent:     time.Now().Format(crud.TimeStamp),
 		}
 		d.InsertExecutedAction(executed)
 	}

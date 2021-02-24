@@ -32,6 +32,7 @@ func ActionResponseHandler(packet Packet) ([]Packet, error) {
 		return allPackets, err
 	}
 
+	// TODO: ADD ERROR CHECKING FROM IMPLANT
 	d.UpdateExecutedActionResponse(actionResp.ActionID, actionResp.Response)
 	d.UpdateExecutedActionSuccessful(actionResp.ActionID, true)
 	d.UpdateExecutedActionTimeRan(actionResp.ActionID, time.Now().Format(crud.TimeStamp))
