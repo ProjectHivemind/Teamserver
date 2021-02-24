@@ -40,8 +40,9 @@ ALTER TABLE public."CallBack" OWNER TO hivemind;
 CREATE TABLE public."ExecutedActions" (
     "id" text NOT NULL,
     "UUIDofAction" text NOT NULL,
-    "TimeRan" text NOT NULL,
-    "Successful" boolean NOT NULL,
+    "TimeSent" text NOT NULL,
+    "TimeRan" text,
+    "Successful" boolean,
     "ActionResponse" text
 );
 
@@ -187,7 +188,7 @@ COPY public."CallBack" ("UUIDImplant", "FirstCall", "LastCall") FROM stdin;
 -- Data for Name: ExecutedActions; Type: TABLE DATA; Schema: public; Owner: hivemind
 --
 
-COPY public."ExecutedActions" (id, "UUIDofAction", "TimeRan", "Successful", "ActionResponse") FROM stdin;
+COPY public."ExecutedActions" (id, "UUIDofAction", "TimeSent", "TimeRan", "Successful", "ActionResponse") FROM stdin;
 \.
 
 

@@ -67,6 +67,7 @@ type StoredActions struct {
 type ExecutedActions struct {
 	Id             string `json:"id"`
 	UUIDofAction   string `json:"uuidofaction"`
+	TimeSent       string `json:"timesent"`
 	TimeRan        string `json:"timeran"`
 	Successful     bool   `json:"successful"`
 	ActionResponse string `json:"actionresponse"`
