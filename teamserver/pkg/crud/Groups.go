@@ -150,3 +150,11 @@ func (d *DatabaseModel) RemoveUUIDFromGroup(id string, implantId string) (bool, 
 	}
 	return check, err
 }
+
+func (d *DatabaseModel) RemoveGroupById(id string) error {
+	sqlStatement := `DELETE FROM public."Groups" WHERE "UUID"=$1`
+
+	_, err := d.db.Exec(sqlStatement, id)
+
+	return err
+}
