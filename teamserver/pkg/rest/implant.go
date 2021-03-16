@@ -16,7 +16,7 @@ func getImplantTypes(w http.ResponseWriter, r *http.Request) {
 
 	implantTypes, err := d.AllImplantTypes()
 	if err != nil {
-		fmt.Fprint(w, err)
+		fmt.Fprint(w, GENERAL_ERROR)
 	} else {
 		json.NewEncoder(w).Encode(implantTypes)
 	}
@@ -27,11 +27,11 @@ func getImplantType(w http.ResponseWriter, r *http.Request) {
 	d.Open()
 	defer d.Close()
 
-	params := mux.Vars(r)
-	implantType, err := d.GetImplantTypeById(params["id"])
+	id := mux.Vars(r)["id"]
+	implantType, err := d.GetImplantTypeById(id)
 
 	if err != nil {
-		fmt.Fprint(w, err)
+		fmt.Fprint(w, GENERAL_ERROR)
 	} else {
 		json.NewEncoder(w).Encode(implantType)
 	}
@@ -44,7 +44,7 @@ func getImplants(w http.ResponseWriter, r *http.Request) {
 
 	implants, err := d.AllImplants()
 	if err != nil {
-		fmt.Fprint(w, err)
+		fmt.Fprint(w, GENERAL_ERROR)
 	} else {
 		json.NewEncoder(w).Encode(implants)
 	}
@@ -55,11 +55,11 @@ func getImplant(w http.ResponseWriter, r *http.Request) {
 	d.Open()
 	defer d.Close()
 
-	params := mux.Vars(r)
-	implant, err := d.GetImplantById(params["id"])
+	id := mux.Vars(r)["id"]
+	implant, err := d.GetImplantById(id)
 
 	if err != nil {
-		fmt.Fprint(w, err)
+		fmt.Fprint(w, GENERAL_ERROR)
 	} else {
 		json.NewEncoder(w).Encode(implant)
 	}
@@ -70,11 +70,11 @@ func getCallBack(w http.ResponseWriter, r *http.Request) {
 	d.Open()
 	defer d.Close()
 
-	params := mux.Vars(r)
-	callBack, err := d.GetCallBackById(params["id"])
+	id := mux.Vars(r)["id"]
+	callBack, err := d.GetCallBackById(id)
 
 	if err != nil {
-		fmt.Fprint(w, err)
+		fmt.Fprint(w, GENERAL_ERROR)
 	} else {
 		json.NewEncoder(w).Encode(callBack)
 	}
