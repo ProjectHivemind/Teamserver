@@ -30,8 +30,8 @@ func getGroup(w http.ResponseWriter, r *http.Request) {
 	d.Open()
 	defer d.Close()
 
-	params := mux.Vars(r)
-	group, err := d.GetGroupById(params["id"])
+	id := mux.Vars(r)["id"]
+	group, err := d.GetGroupById(id)
 
 	if err != nil {
 		fmt.Fprint(w, GENERAL_ERROR)
