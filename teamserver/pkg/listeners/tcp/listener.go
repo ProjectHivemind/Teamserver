@@ -38,7 +38,6 @@ func handleConnection(conn net.Conn) {
 
 	bytes, err := comms.HandleMessage(msg[:n])
 	if err != nil {
-		// fmt.Println(err)
 		return
 	}
 
