@@ -28,6 +28,9 @@ func Start(port string) {
 	router.Path("/group/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(updateGroup).Methods("PUT")
 
 	// Module Funcs
+	router.Path("/module").HandlerFunc(getModules).Methods("GET")
+	router.Path("/module/{id}").HandlerFunc(getModule).Methods("GET")
+	router.Path("/modulefunc/{id}").HandlerFunc(getModuleFuncs).Methods("GET")
 
 	// Stored Action Funcs
 	router.Path("/storedaction").HandlerFunc(getStoredActions).Methods("GET")
