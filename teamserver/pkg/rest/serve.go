@@ -25,6 +25,7 @@ func Start(port string) {
 	router.Path("/group/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(getGroup).Methods("GET")
 	router.Path("/group").HandlerFunc(createGroup).Methods("POST")
 	router.Path("/group/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(deleteGroup).Methods("DELETE")
+	router.Path("/group/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(updateGroup).Methods("PUT")
 
 	// Module Funcs
 
