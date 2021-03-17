@@ -42,6 +42,8 @@ func Start(port string) {
 	router.Path("/stagedaction/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(deleteStagedAction).Methods("DELETE")
 
 	// Executed Action Funcs
+	router.Path("/stagedaction").HandlerFunc(getExecutedActions).Methods("GET")
+	router.Path("/stagedaction/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(getExecutedAction).Methods("GET")
 
 	fmt.Printf("RESTAPI on 0.0.0.0:%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
