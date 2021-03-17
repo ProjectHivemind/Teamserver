@@ -79,6 +79,7 @@ func deleteGroup(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "deleted")
 	}
 }
+
 func updateGroup(w http.ResponseWriter, r *http.Request) {
 	var d crud.DatabaseModel
 	d.Open()
