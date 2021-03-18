@@ -68,9 +68,10 @@ def sendData(data, host, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))
     s.send(json.dumps(data).encode('utf-8'))
-    temp = s.recv(1024).decode('utf-8')
+    temp = s.recv(1024)
     s.close()
-    if temp.strip() == '':
+    # print(f'Received from server: {temp}')
+    if temp.strip() != b'':
         info = json.loads(temp)
         return info
     return None
@@ -78,21 +79,24 @@ def sendData(data, host, port):
 
 def replicateBot():
     port = 1234
-    host = '172.16.100.11'
+    # print(host)
+    host = 'localhost'
     uuid = ''
-    time.sleep(random.randint(0, 10))
+    # time.sleep(random.randint(0, 10))
     p = generatePacket(json.dumps(getRandomRegistrationData()), REGISTRATION)
     # print(f'THIS IS THE PACKET BEING SENT: LENGTH: {len(json.dumps(p))} DATA: {p}')
     info = sendData(p, host, port)
     # print(info)
     if info is not None:
         uuid = info[0]['implantInfo']['UUID']
+    else:
+        print('ERROR WITH SERVER')
+        exit()
 
     for _ in range(1000):
         p = generatePacket('', REQUEST_ACTIONS, uuid)
         time.sleep(5)
         info = sendData(p, host, port)
-        # print(info)
 
 
 class myThread(threading.Thread):
@@ -104,10 +108,9 @@ class myThread(threading.Thread):
 
 
 if __name__ == '__main__':
-
     threads = []
 
-    for _ in range(3000):
+    for _ in range(500):
         temp = myThread()
         threads.append(temp)
         temp.start()
