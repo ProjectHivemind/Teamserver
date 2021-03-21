@@ -18,10 +18,6 @@ func ActionResponseHandler(packet Packet) ([]Packet, error) {
 		return nil, err
 	}
 
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	_, err = d.GetExecutedActionById(actionResp.ActionID)
 	if err != nil {
 		errPacket, _ := CreateErrorPacket(

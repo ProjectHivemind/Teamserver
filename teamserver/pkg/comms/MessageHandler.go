@@ -3,17 +3,21 @@ package comms
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 )
 
+var d crud.DatabaseModel
+
 // HandleMessage takes the packet and decides what to do with it
-func HandleMessage(packetBytes []byte) ([]byte, error) {
+func HandleMessage(packetBytes []byte, db crud.DatabaseModel) ([]byte, error) {
 	var packet Packet
 	if err := json.Unmarshal(packetBytes, &packet); err != nil {
 		fmt.Println(err)
 		return nil, fmt.Errorf("error parsing packet")
 	}
 
-	fmt.Println(packet)
+	d = db
 
 	var resp []Packet
 	var err error

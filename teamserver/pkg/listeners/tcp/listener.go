@@ -5,7 +5,10 @@ import (
 	"net"
 
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/comms"
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 )
+
+var db crud.DatabaseModel
 
 // StartListener start a tcp listening channel on that port
 func StartListener(port string) {
@@ -19,6 +22,10 @@ func StartListener(port string) {
 
 	fmt.Printf("Starting TCP listener on %s\n", serverAddr)
 	defer listener.Close()
+
+	// Connect to the database for this listener
+	db.Open()
+	defer db.Close()
 
 	for {
 		conn, err := listener.Accept()
@@ -36,7 +43,7 @@ func handleConnection(conn net.Conn) {
 	msg := make([]byte, 9000)
 	n, _ := conn.Read(msg)
 
-	bytes, err := comms.HandleMessage(msg[:n])
+	bytes, err := comms.HandleMessage(msg[:n], db)
 	if err != nil {
 		return
 	}

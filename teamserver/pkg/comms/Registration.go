@@ -96,10 +96,6 @@ func RegisterRequestHandler(packet Packet) ([]Packet, error) {
 
 // checkDuplicateRegistration checks to see if there is already an entry with that ImplantType and IP
 func checkDuplicateRegistration(id string, ip string) (bool, string, error) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	_, err := d.GetImplantTypeById(id)
 	if err != nil {
 		return false, "", err
@@ -125,11 +121,6 @@ func moduleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 	if len(newModules) == 0 {
 		return nil, fmt.Errorf("no new modules")
 	}
-
-	// Open the database connection
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
 
 	// Check all of the module functions with the database
 	for i := 0; i < len(newModules); i++ {
@@ -191,10 +182,6 @@ func generateModuleFunc(moduleFunc ModuleFuncInfo) (model.ModulesFuncs, error) {
 
 // insertImplantInfo insert implant info as needed
 func insertImplantInfo(implantType model.ImplantType, implant model.Implant) (bool, error) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	success := true
 	_, err := d.GetImplantTypeById(implantType.UUID)
 	if err != nil {

@@ -19,10 +19,6 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 		return nil, fmt.Errorf("not registered")
 	}
 
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	_, err := d.UpdateCallBackTime(packet.Implant.UUID, time.Now().Format(crud.TimeStamp))
 	if err != nil {
 		return nil, fmt.Errorf("not registered")
@@ -83,10 +79,6 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 func generateAction(stagedAction model.StagedActions) (Action, error) {
 	var action Action
 	args := make(map[string]string, 0)
-
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
 
 	// Get the StoredAction from the database
 	storedAction, err := d.GetStoredActionById(stagedAction.UUIDofAction)
