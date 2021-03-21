@@ -23,6 +23,11 @@ type CallBack struct {
 	LastCall    string `json:"lastcall"`
 }
 
+type ImplantWithCallbacks struct {
+	Implant  Implant  `json:"implant"`
+	CallBack CallBack `json:"callback"`
+}
+
 type ModulesFuncs struct {
 	UUID            string   `json:"uuid"`
 	ModuleFuncName  string   `json:"modulefuncname"`

@@ -19,6 +19,7 @@ func Start(port string) {
 	router.Path("/api/implanttype").HandlerFunc(getImplantTypes).Methods("GET")
 	router.Path("/api/implanttype/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(getImplantType).Methods("GET")
 	router.Path("/api/callback/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(getCallBack).Methods("GET")
+	router.Path("/api/implantswithcallbacks").HandlerFunc(getImplantsWithCallbacks).Methods("GET")
 
 	// Group Funcs
 	router.Path("/api/group").HandlerFunc(getGroups).Methods("GET")

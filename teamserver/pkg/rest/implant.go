@@ -79,3 +79,17 @@ func getCallBack(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(callBack)
 	}
 }
+
+func getImplantsWithCallbacks(w http.ResponseWriter, r *http.Request) {
+	var d crud.DatabaseModel
+	d.Open()
+	defer d.Close()
+
+	callBack, err := d.GetImplantsWithCallbacks()
+
+	if err != nil {
+		fmt.Fprint(w, GENERAL_ERROR)
+	} else {
+		json.NewEncoder(w).Encode(callBack)
+	}
+}

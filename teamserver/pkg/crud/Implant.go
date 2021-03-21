@@ -173,3 +173,41 @@ func (d *DatabaseModel) DeleteImplant(id string) (bool, error) {
 	}
 	return check, err
 }
+
+func (d *DatabaseModel) GetImplantsWithCallbacks() ([]model.ImplantWithCallbacks, error) {
+	var allImplants []model.ImplantWithCallbacks
+
+	sqlStatement := `SELECT * FROM public."Implant" JOIN public."CallBack" ON public."Implant"."UUID" = public."CallBack"."UUIDImplant"`
+
+	rows, err := d.db.Query(sqlStatement)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var implant model.ImplantWithCallbacks
+
+		err = rows.Scan(
+			&implant.Implant.UUID,
+			&implant.Implant.UUIDImplantType,
+			&implant.Implant.PrimaryIP,
+			&implant.Implant.Hostname,
+			&implant.Implant.MAC,
+			&implant.Implant.ImplantOS,
+			pq.Array(&implant.Implant.OtherIPs),
+			pq.Array(&implant.Implant.SupportedModules),
+			&implant.CallBack.FirstCall,
+			&implant.CallBack.UUIDImplant,
+			&implant.CallBack.LastCall,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		allImplants = append(allImplants, implant)
+	}
+
+	return allImplants, nil
+}
