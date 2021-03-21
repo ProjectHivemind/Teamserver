@@ -110,3 +110,21 @@ func (d *DatabaseModel) ChangeOperatorPermission(username string, permission int
 	}
 	return check, err
 }
+
+func (d *DatabaseModel) CheckOperator(username, password string) (bool, error) {
+	sqlStatement := `SELECT * FROM public."Operators" WHERE "Username"=$1 AND "Password"=$2`
+
+	var operator model.Operators
+	check := true
+
+	row := d.db.QueryRow(sqlStatement, username, password)
+	err := row.Scan(
+		&operator.Username,
+		&operator.Password,
+		&operator.Permission,
+	)
+	if err != nil {
+		check = false
+	}
+	return check, err
+}

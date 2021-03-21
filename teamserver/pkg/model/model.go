@@ -83,3 +83,9 @@ type Operators struct {
 	Password   string `json:"password"`
 	Permission int    `json:"permission"`
 }
+
+type Sessions struct {
+	SessionToken string `json:"sessiontoken"`
+	Username     string `json:"username"`
+	ExpTime      string `json:"exptime"`
+}

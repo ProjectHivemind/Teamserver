@@ -49,6 +49,15 @@ func Start(port string) {
 	router.Path("/api/stagedaction").HandlerFunc(getExecutedActions).Methods("GET")
 	router.Path("/api/stagedaction/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(getExecutedAction).Methods("GET")
 
+	// Operator Funcs
+	router.Path("/api/operator").HandlerFunc(getOperators).Methods("GET")
+	router.Path("/api/operator/{username}").HandlerFunc(getOperator).Methods("GET")
+	router.Path("/api/operator/auth").HandlerFunc(authOperator).Methods("POST")
+
+	// Session Funcs
+	router.Path("/api/session/{token}").HandlerFunc(getSession).Methods("GET")
+	router.Path("/api/session/{token}").HandlerFunc(insertSession).Methods("POST")
+
 	fmt.Printf("RESTAPI on 0.0.0.0:%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }

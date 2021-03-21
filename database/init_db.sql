@@ -38,7 +38,7 @@ ALTER TABLE public."CallBack" OWNER TO hivemind;
 --
 
 CREATE TABLE public."ExecutedActions" (
-    "id" text NOT NULL,
+    id text NOT NULL,
     "UUIDofAction" text NOT NULL,
     "TimeSent" text NOT NULL,
     "TimeRan" text,
@@ -149,6 +149,19 @@ CREATE TABLE public."ParamTypes" (
 ALTER TABLE public."ParamTypes" OWNER TO hivemind;
 
 --
+-- Name: Sessions; Type: TABLE; Schema: public; Owner: hivemind
+--
+
+CREATE TABLE public."Sessions" (
+    "SessionToken" text NOT NULL,
+    "Username" text NOT NULL,
+    "ExpTime" text NOT NULL
+);
+
+
+ALTER TABLE public."Sessions" OWNER TO hivemind;
+
+--
 -- Name: StagedActions; Type: TABLE; Schema: public; Owner: hivemind
 --
 
@@ -220,7 +233,7 @@ COPY public."ImplantType" ("UUID", "ImplantName", "ImplantVersion") FROM stdin;
 -- Data for Name: ModuleFuncs; Type: TABLE DATA; Schema: public; Owner: hivemind
 --
 
-COPY public."ModuleFuncs" ("UUID", "ModuleFuncName", "NumOfParameters", "ParameterTypes", "ParameterNames") FROM stdin;
+COPY public."ModuleFuncs" ("UUID", "ModuleFuncName", "ModuleFuncDesc", "NumOfParameters", "ParameterTypes", "ParameterNames") FROM stdin;
 \.
 
 
@@ -228,7 +241,7 @@ COPY public."ModuleFuncs" ("UUID", "ModuleFuncName", "NumOfParameters", "Paramet
 -- Data for Name: Modules; Type: TABLE DATA; Schema: public; Owner: hivemind
 --
 
-COPY public."Modules" ("ModuleName", "ModuleFuncIds") FROM stdin;
+COPY public."Modules" ("ModuleName", "ModuleDesc", "ModuleFuncIds") FROM stdin;
 \.
 
 
@@ -245,6 +258,14 @@ COPY public."Operators" ("Username", "Password", "Permission") FROM stdin;
 --
 
 COPY public."ParamTypes" ("TypeName", "IsComboOption", "ComboOptions") FROM stdin;
+\.
+
+
+--
+-- Data for Name: Sessions; Type: TABLE DATA; Schema: public; Owner: hivemind
+--
+
+COPY public."Sessions" ("SessionToken", "Username", "ExpTime") FROM stdin;
 \.
 
 
@@ -337,6 +358,14 @@ ALTER TABLE ONLY public."ParamTypes"
 
 
 --
+-- Name: Sessions Sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: hivemind
+--
+
+ALTER TABLE ONLY public."Sessions"
+    ADD CONSTRAINT "Sessions_pkey" PRIMARY KEY ("SessionToken");
+
+
+--
 -- Name: StagedActions StagedActions_pkey; Type: CONSTRAINT; Schema: public; Owner: hivemind
 --
 
@@ -358,6 +387,14 @@ ALTER TABLE ONLY public."StoredActions"
 
 ALTER TABLE ONLY public."CallBack"
     ADD CONSTRAINT "UUIDImplant" FOREIGN KEY ("UUIDImplant") REFERENCES public."Implant"("UUID") NOT VALID;
+
+
+--
+-- Name: Sessions Username_FK; Type: FK CONSTRAINT; Schema: public; Owner: hivemind
+--
+
+ALTER TABLE ONLY public."Sessions"
+    ADD CONSTRAINT "Username_FK" FOREIGN KEY ("Username") REFERENCES public."Operators"("Username");
 
 
 --
