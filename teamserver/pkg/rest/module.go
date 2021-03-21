@@ -5,16 +5,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 	"github.com/gorilla/mux"
 )
 
 func getModules(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	modules, err := d.AllModules()
 	if err != nil {
 		fmt.Fprint(w, GENERAL_ERROR)
@@ -24,10 +19,6 @@ func getModules(w http.ResponseWriter, r *http.Request) {
 }
 
 func getModule(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	id := mux.Vars(r)["id"]
 	module, err := d.GetModuleByName(id)
 
@@ -39,10 +30,6 @@ func getModule(w http.ResponseWriter, r *http.Request) {
 }
 
 func getModuleFuncs(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	id := mux.Vars(r)["id"]
 	module, err := d.GetModuleByName(id)
 

@@ -5,15 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/gorilla/mux"
 )
 
 func getImplantTypes(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	implantTypes, err := d.AllImplantTypes()
 	if err != nil {
 		fmt.Fprint(w, GENERAL_ERROR)
@@ -23,10 +18,6 @@ func getImplantTypes(w http.ResponseWriter, r *http.Request) {
 }
 
 func getImplantType(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	id := mux.Vars(r)["id"]
 	implantType, err := d.GetImplantTypeById(id)
 
@@ -38,10 +29,6 @@ func getImplantType(w http.ResponseWriter, r *http.Request) {
 }
 
 func getImplants(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	implants, err := d.AllImplants()
 	if err != nil {
 		fmt.Fprint(w, GENERAL_ERROR)
@@ -51,10 +38,6 @@ func getImplants(w http.ResponseWriter, r *http.Request) {
 }
 
 func getImplant(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	id := mux.Vars(r)["id"]
 	implant, err := d.GetImplantById(id)
 
@@ -66,10 +49,6 @@ func getImplant(w http.ResponseWriter, r *http.Request) {
 }
 
 func getCallBack(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	id := mux.Vars(r)["id"]
 	callBack, err := d.GetCallBackById(id)
 
@@ -81,10 +60,6 @@ func getCallBack(w http.ResponseWriter, r *http.Request) {
 }
 
 func getImplantsWithCallbacks(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	callBack, err := d.GetImplantsWithCallbacks()
 
 	if err != nil {

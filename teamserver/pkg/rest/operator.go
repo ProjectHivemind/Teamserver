@@ -5,15 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/gorilla/mux"
 )
 
 func getOperators(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	operators, err := d.AllOperators()
 
 	if err != nil {
@@ -29,10 +24,6 @@ func getOperators(w http.ResponseWriter, r *http.Request) {
 }
 
 func getOperator(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	username := mux.Vars(r)["username"]
 	operator, err := d.GetOperatorByUsername(username)
 	if err != nil {
@@ -46,10 +37,6 @@ func getOperator(w http.ResponseWriter, r *http.Request) {
 }
 
 func authOperator(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 	check, err := d.CheckOperator(username, password)

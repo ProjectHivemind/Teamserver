@@ -6,17 +6,12 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
 func getStagedActions(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	actions, err := d.AllStagedActions()
 	if err != nil {
 		fmt.Fprint(w, GENERAL_ERROR)
@@ -26,10 +21,6 @@ func getStagedActions(w http.ResponseWriter, r *http.Request) {
 }
 
 func getStagedAction(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	id := mux.Vars(r)["id"]
 	action, err := d.GetStagedActionById(id)
 
@@ -53,10 +44,6 @@ func createStagedAction(w http.ResponseWriter, r *http.Request) {
 	}
 	action.Id = uuid.New().String()
 
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	_, err = d.InsertStagedAction(action)
 	if err != nil {
 		fmt.Fprint(w, GENERAL_ERROR)
@@ -66,10 +53,6 @@ func createStagedAction(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteStagedAction(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	id := mux.Vars(r)["id"]
 	_, err := d.DeleteStoredAction(id)
 

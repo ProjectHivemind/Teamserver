@@ -12,10 +12,6 @@ import (
 )
 
 func getSession(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	token := mux.Vars(r)["token"]
 	session, err := d.GetSessionById(token)
 
@@ -27,10 +23,6 @@ func getSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func insertSession(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	exptime := r.FormValue("ExpTime")
 	t, err := time.Parse(crud.TimeStamp, exptime)
 	if err != nil {

@@ -6,17 +6,12 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
 func getGroups(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	groups, err := d.AllGroups()
 	if err != nil {
 		fmt.Fprint(w, GENERAL_ERROR)
@@ -26,10 +21,6 @@ func getGroups(w http.ResponseWriter, r *http.Request) {
 }
 
 func getGroup(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	id := mux.Vars(r)["id"]
 	group, err := d.GetGroupById(id)
 
@@ -53,10 +44,6 @@ func createGroup(w http.ResponseWriter, r *http.Request) {
 	}
 	group.UUID = uuid.New().String()
 
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	_, err = d.InsertGroup(group)
 	if err != nil {
 		fmt.Fprint(w, GENERAL_ERROR)
@@ -66,10 +53,6 @@ func createGroup(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteGroup(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	id := mux.Vars(r)["id"]
 	err := d.RemoveGroupById(id)
 
@@ -81,10 +64,6 @@ func deleteGroup(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateGroup(w http.ResponseWriter, r *http.Request) {
-	var d crud.DatabaseModel
-	d.Open()
-	defer d.Close()
-
 	// Check if the group exists
 	id := mux.Vars(r)["id"]
 	group, err := d.GetGroupById(id)

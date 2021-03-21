@@ -5,10 +5,13 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/gorilla/mux"
 )
 
 const GENERAL_ERROR = "there is an error"
+
+var d crud.DatabaseModel
 
 func Start(port string) {
 	router := mux.NewRouter()
@@ -57,6 +60,10 @@ func Start(port string) {
 	// Session Funcs
 	router.Path("/api/session/{token}").HandlerFunc(getSession).Methods("GET")
 	router.Path("/api/session/{token}").HandlerFunc(insertSession).Methods("POST")
+
+	// Start Database Connection
+	d.Open()
+	defer d.Close()
 
 	fmt.Printf("RESTAPI on 0.0.0.0:%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
