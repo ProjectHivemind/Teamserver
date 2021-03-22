@@ -24,8 +24,9 @@ type CallBack struct {
 }
 
 type ImplantWithCallbacks struct {
-	Implant  Implant  `json:"implant"`
-	CallBack CallBack `json:"callback"`
+	Implant     Implant     `json:"implant"`
+	ImplantType ImplantType `json:"implanttype"`
+	CallBack    CallBack    `json:"callback"`
 }
 
 type ModulesFuncs struct {

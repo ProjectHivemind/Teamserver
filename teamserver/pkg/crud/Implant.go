@@ -177,7 +177,7 @@ func (d *DatabaseModel) DeleteImplant(id string) (bool, error) {
 func (d *DatabaseModel) GetImplantsWithCallbacks() ([]model.ImplantWithCallbacks, error) {
 	var allImplants []model.ImplantWithCallbacks
 
-	sqlStatement := `SELECT * FROM public."Implant" JOIN public."CallBack" ON public."Implant"."UUID" = public."CallBack"."UUIDImplant"`
+	sqlStatement := `SELECT * FROM public."Implant" JOIN public."CallBack" ON public."Implant"."UUID" = public."CallBack"."UUIDImplant" JOIN public."ImplantType" ON public."Implant"."UUIDImplantType" = public."ImplantType"."UUID"`
 
 	rows, err := d.db.Query(sqlStatement)
 	if err != nil {
@@ -201,6 +201,9 @@ func (d *DatabaseModel) GetImplantsWithCallbacks() ([]model.ImplantWithCallbacks
 			&implant.CallBack.FirstCall,
 			&implant.CallBack.UUIDImplant,
 			&implant.CallBack.LastCall,
+			&implant.ImplantType.ImplantName,
+			&implant.ImplantType.ImplantVersion,
+			&implant.ImplantType.UUID,
 		)
 		if err != nil {
 			return nil, err

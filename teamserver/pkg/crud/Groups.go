@@ -69,14 +69,15 @@ func (d *DatabaseModel) GetGroupByName(name string) (model.Groups, error) {
 
 func (d *DatabaseModel) InsertGroup(group model.Groups) (bool, error) {
 	sqlStatement := `INSERT INTO public."Groups"(
-		"UUID", "GroupName")
-		VALUES ($1, $2);`
+		"UUID", "GroupName", "Implants")
+		VALUES ($1, $2, $3);`
 
 	check := true
 
 	_, err := d.db.Exec(sqlStatement,
 		group.UUID,
-		group.GroupName)
+		group.GroupName,
+		pq.Array(group.Implants))
 
 	if err != nil {
 		check = false
