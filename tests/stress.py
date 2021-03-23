@@ -23,22 +23,21 @@ mod_param_list = ['change', 'white', 'small', 'rating', 'children', 'during', 'r
 
 mod_param_types_list = ['String', 'Int', 'Double']
 
-
 created_modules = []
 
-def getRandomString():
+
+def get_random_string():
     return str(''.join(choice(chars) for _ in range(random.randint(5, 15))))
 
 
-def getRandomDigits():
+def get_random_digits():
     return str(''.join(choice(digits) for _ in range(random.randint(5, 15))))
 
 
-def genModule():
+def gen_module():
     numFuncs = random.randint(1, 9)
     numParams = random.randint(1, 5)
-    # numFuncs = 1
-    # numParams = 1
+
     random_mod_name = random.choice(mod_list)
     mod_list.remove(random_mod_name)
     temp_mod_func_list = copy.deepcopy(mod_func_list)
@@ -60,24 +59,23 @@ def genModule():
     }
 
 
-def getRandomRegistrationData():
+def get_random_registration_data():
     num = random.randint(1, 10)
-    # num = 1
 
     return {
         "IP": socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff))),
         "MAC": "02:00:00:%02x:%02x:%02x" % (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
         "OS": ''.join(choice(chars) for _ in range(random.randint(5, 15))),
-        "hostname": f"{getRandomString()}",
-        "implantName": f"{getRandomString()}",
-        "implantVersion": f"{getRandomDigits()}",
+        "hostname": f"{get_random_string()}",
+        "implantName": f"{get_random_string()}",
+        "implantVersion": f"{get_random_digits()}",
         "otherIPs": [socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff))) for _ in
                      range(random.randint(0, 3))],
         "supportedModules": [choice(created_modules) for _ in range(num)]
     }
 
 
-def generatePacket(data, packet_type, uuid=''):
+def generate_packet(data, packet_type, uuid=''):
     return {
         "data": data,
         "fingerprint": "fingerprint",
@@ -90,29 +88,28 @@ def generatePacket(data, packet_type, uuid=''):
     }
 
 
-def sendData(data, host, port):
+def send_data(data, host, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))
     s.send(json.dumps(data).encode('utf-8'))
     temp = s.recv(1024)
     s.close()
-    # print(f'Received from server: {temp}')
+
     if temp.strip() != b'':
         info = json.loads(temp)
         return info
     return None
 
 
-def replicateBot():
+def replicate_bot():
     port = 1234
-    # print(host)
     host = 'localhost'
     uuid = ''
-    # time.sleep(random.randint(0, 10))
-    p = generatePacket(json.dumps(getRandomRegistrationData()), REGISTRATION)
-    # print(f'THIS IS THE PACKET BEING SENT: LENGTH: {len(json.dumps(p))} DATA: {p}')
-    info = sendData(p, host, port)
-    # print(info)
+
+    p = generate_packet(json.dumps(get_random_registration_data()), REGISTRATION)
+
+    info = send_data(p, host, port)
+
     if info is not None:
         uuid = info[0]['implantInfo']['UUID']
     else:
@@ -120,26 +117,26 @@ def replicateBot():
         exit()
 
     for _ in range(1000):
-        p = generatePacket('', REQUEST_ACTIONS, uuid)
+        p = generate_packet('', REQUEST_ACTIONS, uuid)
         time.sleep(5)
-        info = sendData(p, host, port)
+        info = send_data(p, host, port)
 
 
-class myThread(threading.Thread):
+class MyThread(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
 
     def run(self):
-        replicateBot()
+        replicate_bot()
 
 
 if __name__ == '__main__':
     threads = []
 
-    created_modules = [genModule() for _ in mod_list]
+    created_modules = [gen_module() for _ in mod_list]
 
     for _ in range(500):
-        temp = myThread()
+        temp = MyThread()
         threads.append(temp)
         temp.start()
 
