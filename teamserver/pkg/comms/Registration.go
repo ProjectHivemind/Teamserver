@@ -4,12 +4,15 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 	"github.com/google/uuid"
 )
+
+var registerModLock sync.Mutex = sync.Mutex{}
 
 // RegisterRequestHandler handles the request to register an implant
 func RegisterRequestHandler(packet Packet) ([]Packet, error) {
@@ -126,6 +129,7 @@ func moduleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 	for i := 0; i < len(newModules); i++ {
 		name := newModules[i].ModuleName
 		moduleStr = append(moduleStr, name)
+		registerModLock.Lock()
 		_, err := d.GetModuleByName(name)
 
 		// If the module is not in the database add it
@@ -147,20 +151,22 @@ func moduleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 			}
 			check, err := d.InsertModule(module)
 			if err != nil {
+				registerModLock.Unlock()
 				return nil, fmt.Errorf("MissingRequiredData")
 			}
 
 			if check == true {
 				for j := 0; j < len(moduleFuncs); j++ {
-					_, err = d.InsertModuleFunc(moduleFuncs[i])
+					_, err = d.InsertModuleFunc(moduleFuncs[j])
 					if err != nil {
+						registerModLock.Unlock()
 						return nil, fmt.Errorf("MissingRequiredData")
 					}
 				}
 			}
 
 		}
-
+		registerModLock.Unlock()
 	}
 
 	return moduleStr, nil
