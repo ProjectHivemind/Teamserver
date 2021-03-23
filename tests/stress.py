@@ -1,17 +1,30 @@
-from random import choice
+import copy
+import json
 import random
-from string import ascii_lowercase, digits
 import socket
 import struct
-import json
-import time
 import threading
+import time
+from random import choice
+from string import ascii_lowercase, digits
 
 chars = ascii_lowercase + digits
 
 REGISTRATION = 4
 REQUEST_ACTIONS = 1
+mod_list = ['today', 'south', 'project', 'pages', 'version', 'section', 'found', 'sports', 'house', 'related',
+            'security', 'county', 'american', 'photo', 'members', 'power', 'while', 'network', 'computer', 'systems']
 
+mod_func_list = ['three', 'total', 'place', 'download', 'without', 'access', 'think', 'north', 'current', 'posts',
+                 'media', 'control', 'water', 'history', 'pictures', 'personal', 'since', 'guide', 'board', 'location']
+
+mod_param_list = ['change', 'white', 'small', 'rating', 'children', 'during', 'return', 'students', 'shopping',
+                  'account', 'times']
+
+mod_param_types_list = ['String', 'Int', 'Double']
+
+
+created_modules = []
 
 def getRandomString():
     return str(''.join(choice(chars) for _ in range(random.randint(5, 15))))
@@ -21,8 +34,36 @@ def getRandomDigits():
     return str(''.join(choice(digits) for _ in range(random.randint(5, 15))))
 
 
+def genModule():
+    numFuncs = random.randint(1, 9)
+    numParams = random.randint(1, 5)
+    # numFuncs = 1
+    # numParams = 1
+    random_mod_name = random.choice(mod_list)
+    mod_list.remove(random_mod_name)
+    temp_mod_func_list = copy.deepcopy(mod_func_list)
+    functions = []
+    for i in range(numFuncs):
+        random_func_name = random.choice(temp_mod_func_list)
+        temp_mod_func_list.remove(random_func_name)
+        functions.append({
+            "moduleFuncDesc": f"{random_func_name} Description",
+            "moduleFuncName": f"{random_func_name}",
+            "paramNames": random.sample(mod_param_list, numParams),
+            "paramNum": numParams,
+            "paramTypes": [choice(mod_param_types_list) for _ in range(numParams)]
+        })
+    return {
+        "moduleDesc": f"{random_mod_name} Description",
+        "moduleFuncs": functions,
+        "moduleName": f"{random_mod_name}"
+    }
+
+
 def getRandomRegistrationData():
     num = random.randint(1, 10)
+    # num = 1
+
     return {
         "IP": socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff))),
         "MAC": "02:00:00:%02x:%02x:%02x" % (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
@@ -32,22 +73,7 @@ def getRandomRegistrationData():
         "implantVersion": f"{getRandomDigits()}",
         "otherIPs": [socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff))) for _ in
                      range(random.randint(0, 3))],
-        "supportedModules": [
-            {
-                "moduleDesc": "ModuleDesc",
-                "moduleFuncs": [
-                    {
-                        "moduleFuncDesc": "Module Func Desc",
-                        "moduleFuncName": "Module Func Name",
-                        "paramNames": [''.join(choice(chars) for _ in range(random.randint(5, 15))) for _ in
-                                       range(num)],
-                        "paramNum": num,
-                        "paramTypes": [''.join(choice(chars) for _ in range(random.randint(5, 15))) for _ in range(num)]
-                    }
-                ],
-                "moduleName": f"{getRandomString()}"
-            }
-        ]
+        "supportedModules": [choice(created_modules) for _ in range(num)]
     }
 
 
@@ -109,6 +135,8 @@ class myThread(threading.Thread):
 
 if __name__ == '__main__':
     threads = []
+
+    created_modules = [genModule() for _ in mod_list]
 
     for _ in range(500):
         temp = myThread()
