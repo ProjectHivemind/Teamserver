@@ -35,22 +35,22 @@ def get_random_digits():
 
 
 def gen_module():
-    numFuncs = random.randint(1, 9)
-    numParams = random.randint(1, 5)
+    num_funcs = random.randint(1, 9)
+    num_params = random.randint(1, 5)
 
     random_mod_name = random.choice(mod_list)
     mod_list.remove(random_mod_name)
     temp_mod_func_list = copy.deepcopy(mod_func_list)
     functions = []
-    for i in range(numFuncs):
+    for i in range(num_funcs):
         random_func_name = random.choice(temp_mod_func_list)
         temp_mod_func_list.remove(random_func_name)
         functions.append({
             "moduleFuncDesc": f"{random_func_name} Description",
             "moduleFuncName": f"{random_func_name}",
-            "paramNames": random.sample(mod_param_list, numParams),
-            "paramNum": numParams,
-            "paramTypes": [choice(mod_param_types_list) for _ in range(numParams)]
+            "paramNames": random.sample(mod_param_list, num_params),
+            "paramNum": num_params,
+            "paramTypes": [choice(mod_param_types_list) for _ in range(num_params)]
         })
     return {
         "moduleDesc": f"{random_mod_name} Description",
@@ -89,14 +89,18 @@ def generate_packet(data, packet_type, uuid=''):
 
 
 def send_data(data, host, port):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((host, port))
-    s.send(json.dumps(data).encode('utf-8'))
-    temp = s.recv(1024)
-    s.close()
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    is_open = sock.connect_ex((host, port))
+    while is_open != 0:
+        time.sleep(250)
+        sock.connect_ex((host, port))
+    sock.send(json.dumps(data).encode('utf-8'))
+    data_received = sock.recv(1024)
+    sock.close()
 
-    if temp.strip() != b'':
-        info = json.loads(temp)
+    if data_received.strip() != b'':
+        info = json.loads(data_received)
         return info
     return None
 
@@ -135,7 +139,7 @@ if __name__ == '__main__':
 
     created_modules = [gen_module() for _ in mod_list]
 
-    for _ in range(500):
+    for _ in range(1000):
         temp = MyThread()
         threads.append(temp)
         temp.start()
