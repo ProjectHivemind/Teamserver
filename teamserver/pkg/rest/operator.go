@@ -43,6 +43,6 @@ func authOperator(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprint(w, "auth failed")
 	} else {
-		json.NewEncoder(w).Encode(check)
+		fmt.Fprint(w, check)
 	}
 }

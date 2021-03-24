@@ -60,11 +60,13 @@ func Start(port string) {
 	// Session Funcs
 	router.Path("/api/session/{token}").HandlerFunc(getSession).Methods("GET")
 	router.Path("/api/session/{token}").HandlerFunc(insertSession).Methods("POST")
+	router.Path("/api/session/validate/{token}").HandlerFunc(validateSession).Methods("GET")
+	router.Path("/api/session/{token}").HandlerFunc(deleteSession).Methods("DELETE")
 
 	// Start Database Connection
 	d.Open()
 	defer d.Close()
 
-	fmt.Printf("RESTAPI on 0.0.0.0:%s", port)
+	fmt.Printf("RESTAPI on 0.0.0.0:%s\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }

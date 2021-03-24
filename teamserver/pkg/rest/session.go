@@ -23,7 +23,7 @@ func getSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func insertSession(w http.ResponseWriter, r *http.Request) {
-	exptime := r.FormValue("ExpTime")
+	exptime := time.Now().Add(5 * time.Minute).Format(crud.TimeStamp)
 	t, err := time.Parse(crud.TimeStamp, exptime)
 	if err != nil {
 		fmt.Fprint(w, GENERAL_ERROR)
@@ -47,4 +47,30 @@ func insertSession(w http.ResponseWriter, r *http.Request) {
 	} else {
 		json.NewEncoder(w).Encode(session)
 	}
+}
+
+func validateSession(w http.ResponseWriter, r *http.Request) {
+	token := mux.Vars(r)["token"]
+	session, err := d.GetSessionById(token)
+	if err != nil {
+		fmt.Fprint(w, "false")
+		return
+	}
+
+	t, err := time.Parse(crud.TimeStamp, session.ExpTime)
+	if t.After(time.Now()) {
+		fmt.Fprint(w, "session expired")
+		return
+	}
+
+	fmt.Fprint(w, "true")
+}
+
+func deleteSession(w http.ResponseWriter, r *http.Request) {
+	token := mux.Vars(r)["token"]
+	err := d.RemoveSessionById(token)
+	if err != nil {
+		fmt.Fprint(w, "false")
+	}
+	fmt.Fprint(w, "true")
 }
