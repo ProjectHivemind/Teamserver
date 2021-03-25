@@ -40,7 +40,7 @@ func StartListener(port string) {
 
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
-	msg := make([]byte, 9000)
+	msg := make([]byte, 25000) // Needs to be able to accept large registrations, may need to be bigger or done differently
 	n, _ := conn.Read(msg)
 
 	bytes, err := comms.HandleMessage(msg[:n], db)
