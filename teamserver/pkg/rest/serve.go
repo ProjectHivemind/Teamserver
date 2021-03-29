@@ -49,8 +49,8 @@ func Start(port string) {
 	router.Path("/api/stagedaction/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(deleteStagedAction).Methods("DELETE")
 
 	// Executed Action Funcs
-	router.Path("/api/stagedaction").HandlerFunc(getExecutedActions).Methods("GET")
-	router.Path("/api/stagedaction/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(getExecutedAction).Methods("GET")
+	router.Path("/api/executedaction").HandlerFunc(getExecutedActions).Methods("GET")
+	router.Path("/api/executedaction/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(getExecutedAction).Methods("GET")
 
 	// Operator Funcs
 	router.Path("/api/operator").HandlerFunc(getOperators).Methods("GET")
