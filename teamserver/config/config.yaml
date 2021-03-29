@@ -1,0 +1,23 @@
+# Teamserver config
+# The teamserver uses this config file to get up listeners and ports
+
+database:
+  uri: "localhost"
+  port: "5432"
+
+restapi:
+  port: "4321"
+
+# For more than one of the same type of listener on a different port, just add one
+# as the example commented out below does
+listeners:
+  - tcp:
+      enabled: "true"
+      port: "1234"
+  # Example of adding another TCP listener on a different port
+  # - tcp:
+  #     enabled: "true"
+  #     port: "12345"
+  - udp:
+      enabled: "false"
+      port: "0"
