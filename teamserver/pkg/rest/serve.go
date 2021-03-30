@@ -43,7 +43,7 @@ func Start(port string) {
 	router.Path("/api/storedaction/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(deleteStoredAction).Methods("DELETE")
 
 	// Staged Action Funcs
-	router.Path("/api/stagedaction").HandlerFunc(getStagedActions).Methods("GET")
+	router.Path("/api/stagedactionfrontend").HandlerFunc(getStagedActionsFrontend).Methods("GET")
 	router.Path("/api/stagedaction/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(getStagedAction).Methods("GET")
 	router.Path("/api/stagedaction").HandlerFunc(createStagedAction).Methods("POST")
 	router.Path("/api/stagedaction/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}").HandlerFunc(deleteStagedAction).Methods("DELETE")

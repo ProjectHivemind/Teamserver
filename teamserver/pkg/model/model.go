@@ -63,6 +63,12 @@ type StagedActions struct {
 	TimeStaged    string `json:"timestaged"`
 }
 
+type StagedActionsFrontend struct {
+	Implant      Implant       `json:"implant"`
+	StagedAction StagedActions `json:"stagedactions"`
+	StoredAction StoredActions `json:"storedactions"`
+}
+
 type StoredActions struct {
 	UUID        string   `json:"uuid"`
 	ModuleToRun string   `json:"moduletorun"`

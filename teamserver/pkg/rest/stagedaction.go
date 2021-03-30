@@ -20,6 +20,15 @@ func getStagedActions(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func getStagedActionsFrontend(w http.ResponseWriter, r *http.Request) {
+	actions, err := d.AllStagedActionsFrontend()
+	if err != nil {
+		fmt.Fprint(w, GENERAL_ERROR)
+	} else {
+		json.NewEncoder(w).Encode(actions)
+	}
+}
+
 func getStagedAction(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	action, err := d.GetStagedActionById(id)
