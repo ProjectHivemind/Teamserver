@@ -8,13 +8,12 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	HOST     = "localhost"
-	PORT     = "5432"
-	USER     = "hivemind"
-	PASSWORD = "changeme123"
-	DBNAME   = "hivemind"
-)
+var HOST string = "localhost"
+var PORT string = "5432"
+var USER string = "hivemind"
+var PASSWORD string = "changeme123"
+var DBNAME string = "hivemind"
+var SSLMODE string = "disabled"
 
 const TimeStamp = time.Stamp
 
@@ -22,10 +21,18 @@ type DatabaseModel struct {
 	db *sql.DB
 }
 
+func SetDatabaseOptions(host, port, user, password, sslMode string) {
+	HOST = host
+	PORT = port
+	USER = user
+	PASSWORD = password
+	SSLMODE = sslMode
+}
+
 func (d *DatabaseModel) Open() {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		HOST, PORT, USER, PASSWORD, DBNAME)
+		"password=%s dbname=%s sslmode=%s",
+		HOST, PORT, USER, PASSWORD, DBNAME, SSLMODE)
 
 	var err error
 	d.db, err = sql.Open("postgres", psqlInfo)
