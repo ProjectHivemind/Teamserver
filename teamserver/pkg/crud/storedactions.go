@@ -22,6 +22,7 @@ func (d *DatabaseModel) AllStoredActions() ([]model.StoredAction, error) {
 
 		err = rows.Scan(
 			&storedAction.UUID,
+			&storedAction.Name,
 			&storedAction.ModuleToRun,
 			&storedAction.ModuleFunc,
 			pq.Array(&storedAction.Arguments),
@@ -44,6 +45,7 @@ func (d *DatabaseModel) GetStoredActionById(id string) (model.StoredAction, erro
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
 		&storedAction.UUID,
+		&storedAction.Name,
 		&storedAction.ModuleToRun,
 		&storedAction.ModuleFunc,
 		pq.Array(&storedAction.Arguments),
@@ -54,13 +56,14 @@ func (d *DatabaseModel) GetStoredActionById(id string) (model.StoredAction, erro
 
 func (d *DatabaseModel) InsertStoredAction(storedAction model.StoredAction) (bool, error) {
 	sqlStatement := `INSERT INTO public."StoredActions"(
-		"UUID", "ModuleToRun", "ModuleFunc", "Arguments")
-		VALUES ($1, $2, $3, $4);`
+		"UUID", "Name", "ModuleToRun", "ModuleFunc", "Arguments")
+		VALUES ($1, $2, $3, $4, $5);`
 
 	check := true
 
 	_, err := d.db.Exec(sqlStatement,
 		storedAction.UUID,
+		storedAction.Name,
 		storedAction.ModuleToRun,
 		storedAction.ModuleFunc,
 		pq.Array(storedAction.Arguments))

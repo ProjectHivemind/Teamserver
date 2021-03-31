@@ -70,14 +70,16 @@ type StagedActionsFrontend struct {
 }
 
 type StoredAction struct {
-	UUID        string   `json:"uuid"`
-	ModuleToRun string   `json:"module_to_run"`
-	ModuleFunc  string   `json:"module_func"`
-	Arguments   []string `json:"arguments"`
+	UUID        string `json:"uuid"`
+	Name        string `json:"name"`
+	ModuleToRun string `json:"module_to_run"`
+	ModuleFunc  string `json:"module_func"`
+	Arguments   string `json:"arguments"`
 }
 
 type ExecutedAction struct {
 	Id             string `json:"id"`
+	UUIDofImplant  string `json:"uuid_of_implant"`
 	UUIDofAction   string `json:"uuid_of_action"`
 	TimeSent       string `json:"time_sent"`
 	TimeRan        string `json:"time_ran"`

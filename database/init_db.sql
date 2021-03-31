@@ -181,9 +181,10 @@ ALTER TABLE public."StagedActions" OWNER TO hivemind;
 
 CREATE TABLE public."StoredActions" (
     "UUID" text NOT NULL,
+    "Name" text NOT NULL,
     "ModuleToRun" text NOT NULL,
     "ModuleFunc" text NOT NULL,
-    "Arguments" text[]
+    "Arguments" text
 );
 
 
@@ -420,6 +421,12 @@ ALTER TABLE ONLY public."StagedActions"
 ALTER TABLE ONLY public."ExecutedActions"
     ADD CONSTRAINT storedactions_fk FOREIGN KEY ("UUIDofAction") REFERENCES public."StoredActions"("UUID") NOT VALID;
 
+--
+-- Name: ExecutedActions implant_fk; Type: FK CONSTRAINT; Schema: public; Owner: hivemind
+--
+
+ALTER TABLE ONLY public."ExecutedActions"
+    ADD CONSTRAINT implant_fk FOREIGN KEY ("UUIDofImplant") REFERENCES public."Implants"("UUID") NOT VALID;
 
 --
 -- Name: Implant uuid_fk; Type: FK CONSTRAINT; Schema: public; Owner: hivemind
