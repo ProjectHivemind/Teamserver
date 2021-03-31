@@ -10,8 +10,8 @@ services:
     volumes:
       - database-data:/var/lib/postgresql/data/
       - ./database/init_db.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
 
   pgadmin:
     image: dpage/pgadmin4:4.23
@@ -25,6 +25,20 @@ services:
     depends_on:
         - postgres
 
+  teamserver:
+    image: golang:1.15-alpine
+    container_name: teamserver
+    volumes:
+      - ./teamserver:/go/src/teamserver
+    working_dir: /go/src/teamserver
+    command: go run cmd/hivemind/server.go config/config.yaml
+    depends_on: 
+      - postgres
+    ports:
+      - "1234:1234"
+      - "4321:4321"
+  
+  
 volumes:
   database-data:
   pgadmin:
