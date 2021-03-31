@@ -37,7 +37,7 @@ func createStoredAction(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err)
 	}
 
-	var action model.StoredActions
+	var action model.StoredAction
 	err = json.Unmarshal(reqBody, &action)
 	if err != nil {
 		fmt.Fprint(w, err)

@@ -174,8 +174,8 @@ func (d *DatabaseModel) DeleteImplant(id string) (bool, error) {
 	return check, err
 }
 
-func (d *DatabaseModel) GetImplantsWithCallbacks() ([]model.ImplantWithCallbacks, error) {
-	var allImplants []model.ImplantWithCallbacks
+func (d *DatabaseModel) GetImplantsWithCallbacks() ([]model.ImplantWithCallback, error) {
+	var allImplants []model.ImplantWithCallback
 
 	sqlStatement := `SELECT * FROM public."Implant" JOIN public."CallBack" ON public."Implant"."UUID" = public."CallBack"."UUIDImplant" JOIN public."ImplantType" ON public."Implant"."UUIDImplantType" = public."ImplantType"."UUID"`
 
@@ -187,7 +187,7 @@ func (d *DatabaseModel) GetImplantsWithCallbacks() ([]model.ImplantWithCallbacks
 	defer rows.Close()
 
 	for rows.Next() {
-		var implant model.ImplantWithCallbacks
+		var implant model.ImplantWithCallback
 
 		err = rows.Scan(
 			&implant.Implant.UUID,

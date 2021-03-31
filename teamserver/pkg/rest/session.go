@@ -35,7 +35,7 @@ func insertSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token := mux.Vars(r)["token"]
-	session := model.Sessions{
+	session := model.Session{
 		SessionToken: token,
 		Username:     r.FormValue("username"),
 		ExpTime:      exptime,

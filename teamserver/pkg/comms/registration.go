@@ -135,7 +135,7 @@ func moduleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 		// If the module is not in the database add it
 		if err != nil {
 
-			var moduleFuncs []model.ModulesFuncs
+			var moduleFuncs []model.ModulesFunc
 			moduleFuncIds := []string{}
 			for j := 0; j < len(newModules[i].ModuleFuncs); j++ {
 				newFunc, _ := generateModuleFunc(newModules[i].ModuleFuncs[j])
@@ -144,7 +144,7 @@ func moduleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 			}
 
 			// Insert the module after running checks
-			module := model.Modules{
+			module := model.Module{
 				ModuleName:    name,
 				ModuleDesc:    newModules[i].ModuleDesc,
 				ModuleFuncIds: moduleFuncIds,
@@ -173,14 +173,14 @@ func moduleCheckHandler(newModules []ModuleInfo) ([]string, error) {
 }
 
 // generateModuleFunc converts ModuleFuncInfo into a ModuleFunc struct for the database
-func generateModuleFunc(moduleFunc ModuleFuncInfo) (model.ModulesFuncs, error) {
-	newModuleFunc := model.ModulesFuncs{
-		UUID:            uuid.New().String(),
-		ModuleFuncName:  moduleFunc.ModuleFuncName,
-		ModuleFuncDesc:  moduleFunc.ModuleFuncDesc,
-		NumOfParameters: moduleFunc.ParamNum,
-		ParameterTypes:  moduleFunc.ParamTypes,
-		ParameterNames:  moduleFunc.ParamNames,
+func generateModuleFunc(moduleFunc ModuleFuncInfo) (model.ModulesFunc, error) {
+	newModuleFunc := model.ModulesFunc{
+		UUID:           uuid.New().String(),
+		ModuleFuncName: moduleFunc.ModuleFuncName,
+		ModuleFuncDesc: moduleFunc.ModuleFuncDesc,
+		NumOfParams:    moduleFunc.ParamNum,
+		ParamTypes:     moduleFunc.ParamTypes,
+		ParamNames:     moduleFunc.ParamNames,
 	}
 
 	return newModuleFunc, nil

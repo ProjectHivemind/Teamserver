@@ -37,7 +37,7 @@ func createGroup(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err)
 	}
 
-	var group model.Groups
+	var group model.Group
 	err = json.Unmarshal(reqBody, &group)
 	if err != nil {
 		fmt.Fprint(w, err)

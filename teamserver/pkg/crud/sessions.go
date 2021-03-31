@@ -2,8 +2,8 @@ package crud
 
 import "github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 
-func (d *DatabaseModel) GetSessionById(id string) (model.Sessions, error) {
-	var session model.Sessions
+func (d *DatabaseModel) GetSessionById(id string) (model.Session, error) {
+	var session model.Session
 
 	sqlStatement := `SELECT * FROM public."Sessions" WHERE "SessionToken"=$1`
 
@@ -17,7 +17,7 @@ func (d *DatabaseModel) GetSessionById(id string) (model.Sessions, error) {
 	return session, err
 }
 
-func (d *DatabaseModel) InsertSession(sessions model.Sessions) (bool, error) {
+func (d *DatabaseModel) InsertSession(sessions model.Session) (bool, error) {
 	sqlStatement := `INSERT INTO public."Sessions"(
 		"SessionToken", "Username", "ExpTime")
 		VALUES ($1, $2, $3);`

@@ -64,7 +64,7 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 
 		// MOVE STAGED TO EXECUTED HERE
 		d.DeleteStagedAction(stagedActions[i].Id)
-		executed := model.ExecutedActions{
+		executed := model.ExecutedAction{
 			Id:           stagedActions[i].Id,
 			UUIDofAction: stagedActions[i].UUIDofAction,
 			TimeSent:     time.Now().Format(crud.TimeStamp),
@@ -76,7 +76,7 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 }
 
 // generateAction given a staged action, it will return a sendable action Packet
-func generateAction(stagedAction model.StagedActions) (Action, error) {
+func generateAction(stagedAction model.StagedAction) (Action, error) {
 	var action Action
 	args := make(map[string]string, 0)
 
@@ -101,7 +101,7 @@ func generateAction(stagedAction model.StagedActions) (Action, error) {
 		}
 
 		if moduleFunc.ModuleFuncName == storedAction.ModuleFunc {
-			argStr = moduleFunc.ParameterNames
+			argStr = moduleFunc.ParamNames
 			break
 		}
 	}

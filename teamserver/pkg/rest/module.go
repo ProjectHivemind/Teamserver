@@ -33,7 +33,7 @@ func getModuleFuncs(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	module, err := d.GetModuleByName(id)
 
-	var moduleFuncs []model.ModulesFuncs
+	var moduleFuncs []model.ModulesFunc
 	for _, val := range module.ModuleFuncIds {
 		moduleFunc, err := d.GetModuleFuncById(val)
 		if err == nil {
