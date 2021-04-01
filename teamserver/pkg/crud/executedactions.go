@@ -21,6 +21,7 @@ func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedAction, error) {
 
 		err = rows.Scan(
 			&executedAction.Id,
+			&executedAction.UUIDofImplant,
 			&executedAction.UUIDofAction,
 			&executedAction.TimeSent,
 			&executedAction.TimeRan,
@@ -45,6 +46,7 @@ func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedAction, 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
 		&executedAction.Id,
+		&executedAction.UUIDofImplant,
 		&executedAction.UUIDofAction,
 		&executedAction.TimeSent,
 		&executedAction.TimeRan,
@@ -57,13 +59,14 @@ func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedAction, 
 
 func (d *DatabaseModel) InsertExecutedAction(executedAction model.ExecutedAction) (bool, error) {
 	sqlStatement := `INSERT INTO public."ExecutedActions"(
-		id, "UUIDofAction", "TimeSent", "TimeRan", "Successful", "ActionResponse")
-		VALUES ($1, $2, $3, $4, $5, $6);`
+		id, "UUIDofImplant", "UUIDofAction", "TimeSent", "TimeRan", "Successful", "ActionResponse")
+		VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
 	check := true
 
 	_, err := d.db.Exec(sqlStatement,
 		executedAction.Id,
+		executedAction.UUIDofImplant,
 		executedAction.UUIDofAction,
 		executedAction.TimeSent,
 		executedAction.TimeRan,

@@ -39,6 +39,7 @@ ALTER TABLE public."CallBack" OWNER TO hivemind;
 
 CREATE TABLE public."ExecutedActions" (
     id text NOT NULL,
+    "UUIDofImplant" text NOT NULL,
     "UUIDofAction" text NOT NULL,
     "TimeSent" text NOT NULL,
     "TimeRan" text,
@@ -426,7 +427,7 @@ ALTER TABLE ONLY public."ExecutedActions"
 --
 
 ALTER TABLE ONLY public."ExecutedActions"
-    ADD CONSTRAINT implant_fk FOREIGN KEY ("UUIDofImplant") REFERENCES public."Implants"("UUID") NOT VALID;
+    ADD CONSTRAINT implant_fk FOREIGN KEY ("UUIDofImplant") REFERENCES public."Implant"("UUID") NOT VALID;
 
 --
 -- Name: Implant uuid_fk; Type: FK CONSTRAINT; Schema: public; Owner: hivemind

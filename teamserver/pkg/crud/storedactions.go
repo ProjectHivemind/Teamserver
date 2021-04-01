@@ -2,7 +2,6 @@ package crud
 
 import (
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
-	"github.com/lib/pq"
 )
 
 func (d *DatabaseModel) AllStoredActions() ([]model.StoredAction, error) {
@@ -25,7 +24,7 @@ func (d *DatabaseModel) AllStoredActions() ([]model.StoredAction, error) {
 			&storedAction.Name,
 			&storedAction.ModuleToRun,
 			&storedAction.ModuleFunc,
-			pq.Array(&storedAction.Arguments),
+			&storedAction.Arguments,
 		)
 		if err != nil {
 			return nil, err
@@ -48,7 +47,7 @@ func (d *DatabaseModel) GetStoredActionById(id string) (model.StoredAction, erro
 		&storedAction.Name,
 		&storedAction.ModuleToRun,
 		&storedAction.ModuleFunc,
-		pq.Array(&storedAction.Arguments),
+		&storedAction.Arguments,
 	)
 
 	return storedAction, err
@@ -66,7 +65,7 @@ func (d *DatabaseModel) InsertStoredAction(storedAction model.StoredAction) (boo
 		storedAction.Name,
 		storedAction.ModuleToRun,
 		storedAction.ModuleFunc,
-		pq.Array(storedAction.Arguments))
+		storedAction.Arguments)
 
 	if err != nil {
 		check = false
