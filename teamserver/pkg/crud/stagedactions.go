@@ -65,9 +65,10 @@ func (d *DatabaseModel) AllStagedActionsFrontend() ([]model.StagedActionsFronten
 			pq.Array(&stagedAction.Implant.OtherIPs),
 			pq.Array(&stagedAction.Implant.SupportedModules),
 			&stagedAction.StoredAction.UUID,
+			&stagedAction.StoredAction.Name,
 			&stagedAction.StoredAction.ModuleToRun,
 			&stagedAction.StoredAction.ModuleFunc,
-			pq.Array(&stagedAction.StoredAction.Arguments),
+			&stagedAction.StoredAction.Arguments,
 		)
 		if err != nil {
 			return nil, err
