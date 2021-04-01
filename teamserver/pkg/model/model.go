@@ -87,6 +87,12 @@ type ExecutedAction struct {
 	ActionResponse string `json:"action_response"`
 }
 
+type ExecutedActionsFrontend struct {
+	Implant        Implant        `json:"implant"`
+	ExecutedAction ExecutedAction `json:"executed_action"`
+	StoredAction   StoredAction   `json:"stored_action"`
+}
+
 type Operator struct {
 	Username   string `json:"username"`
 	Password   string `json:"password"`

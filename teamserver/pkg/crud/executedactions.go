@@ -2,6 +2,7 @@ package crud
 
 import (
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+	"github.com/lib/pq"
 )
 
 func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedAction, error) {
@@ -27,6 +28,51 @@ func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedAction, error) {
 			&executedAction.TimeRan,
 			&executedAction.Successful,
 			&executedAction.ActionResponse,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		allExecutedActions = append(allExecutedActions, executedAction)
+	}
+
+	return allExecutedActions, nil
+}
+
+func (d *DatabaseModel) AllExecutedActionsFrontend() ([]model.ExecutedActionsFrontend, error) {
+	var allExecutedActions []model.ExecutedActionsFrontend
+
+	sqlStatement := `SELECT * FROM public."ExecutedActions" JOIN public."Implant" ON public."Implant"."UUID" = public."ExecutedActions"."UUIDofImplant" JOIN public."StoredActions" ON public."StoredActions"."UUID" = public."ExecutedActions"."UUIDofAction"`
+
+	rows, err := d.db.Query(sqlStatement)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var executedAction model.ExecutedActionsFrontend
+
+		err = rows.Scan(
+			&executedAction.ExecutedAction.Id,
+			&executedAction.ExecutedAction.UUIDofImplant,
+			&executedAction.ExecutedAction.UUIDofAction,
+			&executedAction.ExecutedAction.TimeSent,
+			&executedAction.ExecutedAction.Successful,
+			&executedAction.ExecutedAction.ActionResponse,
+			&executedAction.Implant.UUID,
+			&executedAction.Implant.UUIDImplantType,
+			&executedAction.Implant.PrimaryIP,
+			&executedAction.Implant.Hostname,
+			&executedAction.Implant.MAC,
+			&executedAction.Implant.ImplantOS,
+			pq.Array(&executedAction.Implant.OtherIPs),
+			pq.Array(&executedAction.Implant.SupportedModules),
+			&executedAction.StoredAction.UUID,
+			&executedAction.StoredAction.ModuleToRun,
+			&executedAction.StoredAction.ModuleFunc,
+			&executedAction.StoredAction.Arguments,
 		)
 		if err != nil {
 			return nil, err
