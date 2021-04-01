@@ -4,8 +4,8 @@ import (
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 )
 
-func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedActions, error) {
-	var allExecutedActions []model.ExecutedActions
+func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedAction, error) {
+	var allExecutedActions []model.ExecutedAction
 
 	sqlStatement := `SELECT * FROM public."ExecutedActions"`
 
@@ -17,10 +17,11 @@ func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedActions, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var executedAction model.ExecutedActions
+		var executedAction model.ExecutedAction
 
 		err = rows.Scan(
 			&executedAction.Id,
+			&executedAction.UUIDofImplant,
 			&executedAction.UUIDofAction,
 			&executedAction.TimeSent,
 			&executedAction.TimeRan,
@@ -37,14 +38,15 @@ func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedActions, error) {
 	return allExecutedActions, nil
 }
 
-func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedActions, error) {
-	var executedAction model.ExecutedActions
+func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedAction, error) {
+	var executedAction model.ExecutedAction
 
 	sqlStatement := `SELECT * FROM public."ExecutedActions" WHERE "id"=$1`
 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
 		&executedAction.Id,
+		&executedAction.UUIDofImplant,
 		&executedAction.UUIDofAction,
 		&executedAction.TimeSent,
 		&executedAction.TimeRan,
@@ -55,15 +57,16 @@ func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedActions,
 	return executedAction, err
 }
 
-func (d *DatabaseModel) InsertExecutedAction(executedAction model.ExecutedActions) (bool, error) {
+func (d *DatabaseModel) InsertExecutedAction(executedAction model.ExecutedAction) (bool, error) {
 	sqlStatement := `INSERT INTO public."ExecutedActions"(
-		id, "UUIDofAction", "TimeSent", "TimeRan", "Successful", "ActionResponse")
-		VALUES ($1, $2, $3, $4, $5, $6);`
+		id, "UUIDofImplant", "UUIDofAction", "TimeSent", "TimeRan", "Successful", "ActionResponse")
+		VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
 	check := true
 
 	_, err := d.db.Exec(sqlStatement,
 		executedAction.Id,
+		executedAction.UUIDofImplant,
 		executedAction.UUIDofAction,
 		executedAction.TimeSent,
 		executedAction.TimeRan,

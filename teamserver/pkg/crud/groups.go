@@ -7,8 +7,8 @@ import (
 	"github.com/lib/pq"
 )
 
-func (d *DatabaseModel) AllGroups() ([]model.Groups, error) {
-	var allGroups []model.Groups
+func (d *DatabaseModel) AllGroups() ([]model.Group, error) {
+	var allGroups []model.Group
 
 	sqlStatement := `SELECT * FROM public."Groups"`
 
@@ -20,7 +20,7 @@ func (d *DatabaseModel) AllGroups() ([]model.Groups, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var group model.Groups
+		var group model.Group
 
 		err = rows.Scan(
 			&group.UUID,
@@ -37,8 +37,8 @@ func (d *DatabaseModel) AllGroups() ([]model.Groups, error) {
 	return allGroups, nil
 }
 
-func (d *DatabaseModel) GetGroupById(id string) (model.Groups, error) {
-	var group model.Groups
+func (d *DatabaseModel) GetGroupById(id string) (model.Group, error) {
+	var group model.Group
 
 	sqlStatement := `SELECT * FROM public."Groups" WHERE "UUID"=$1`
 
@@ -52,8 +52,8 @@ func (d *DatabaseModel) GetGroupById(id string) (model.Groups, error) {
 	return group, err
 }
 
-func (d *DatabaseModel) GetGroupByName(name string) (model.Groups, error) {
-	var group model.Groups
+func (d *DatabaseModel) GetGroupByName(name string) (model.Group, error) {
+	var group model.Group
 
 	sqlStatement := `SELECT * FROM public."Groups" WHERE "GroupName"=$1`
 
@@ -67,7 +67,7 @@ func (d *DatabaseModel) GetGroupByName(name string) (model.Groups, error) {
 	return group, err
 }
 
-func (d *DatabaseModel) InsertGroup(group model.Groups) (bool, error) {
+func (d *DatabaseModel) InsertGroup(group model.Group) (bool, error) {
 	sqlStatement := `INSERT INTO public."Groups"(
 		"UUID", "GroupName", "Implants")
 		VALUES ($1, $2, $3);`

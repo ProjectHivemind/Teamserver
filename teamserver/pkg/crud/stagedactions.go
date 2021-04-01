@@ -5,8 +5,8 @@ import (
 	"github.com/lib/pq"
 )
 
-func (d *DatabaseModel) AllStagedActions() ([]model.StagedActions, error) {
-	var allStagedActions []model.StagedActions
+func (d *DatabaseModel) AllStagedActions() ([]model.StagedAction, error) {
+	var allStagedActions []model.StagedAction
 
 	sqlStatement := `SELECT * FROM public."StagedActions"`
 
@@ -18,7 +18,7 @@ func (d *DatabaseModel) AllStagedActions() ([]model.StagedActions, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var stagedAction model.StagedActions
+		var stagedAction model.StagedAction
 
 		err = rows.Scan(
 			&stagedAction.Id,
@@ -79,8 +79,8 @@ func (d *DatabaseModel) AllStagedActionsFrontend() ([]model.StagedActionsFronten
 	return allStagedActions, nil
 }
 
-func (d *DatabaseModel) GetStagedActionById(id string) (model.StagedActions, error) {
-	var stagedAction model.StagedActions
+func (d *DatabaseModel) GetStagedActionById(id string) (model.StagedAction, error) {
+	var stagedAction model.StagedAction
 
 	sqlStatement := `SELECT * FROM public."StagedActions" WHERE "id"=$1`
 
@@ -95,8 +95,8 @@ func (d *DatabaseModel) GetStagedActionById(id string) (model.StagedActions, err
 	return stagedAction, err
 }
 
-func (d *DatabaseModel) GetStagedActionByImplant(id string) ([]model.StagedActions, error) {
-	var allStagedActions []model.StagedActions
+func (d *DatabaseModel) GetStagedActionByImplant(id string) ([]model.StagedAction, error) {
+	var allStagedActions []model.StagedAction
 
 	sqlStatement := `SELECT * FROM public."StagedActions" WHERE "UUIDofImplant"=$1`
 
@@ -108,7 +108,7 @@ func (d *DatabaseModel) GetStagedActionByImplant(id string) ([]model.StagedActio
 	defer rows.Close()
 
 	for rows.Next() {
-		var stagedAction model.StagedActions
+		var stagedAction model.StagedAction
 
 		err = rows.Scan(
 			&stagedAction.Id,
@@ -126,7 +126,7 @@ func (d *DatabaseModel) GetStagedActionByImplant(id string) ([]model.StagedActio
 	return allStagedActions, nil
 }
 
-func (d *DatabaseModel) InsertStagedAction(stagedAction model.StagedActions) (bool, error) {
+func (d *DatabaseModel) InsertStagedAction(stagedAction model.StagedAction) (bool, error) {
 	sqlStatement := `INSERT INTO public."StagedActions"(
 		"id", "UUIDofAction", "UUIDofImplant", "TimeStaged")
 		VALUES ($1, $2, $3, $4);`

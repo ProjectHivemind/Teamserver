@@ -46,7 +46,7 @@ func createStagedAction(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err)
 	}
 
-	var action model.StagedActions
+	var action model.StagedAction
 	err = json.Unmarshal(reqBody, &action)
 	if err != nil {
 		fmt.Fprint(w, err)

@@ -5,8 +5,8 @@ import (
 	"github.com/lib/pq"
 )
 
-func (d *DatabaseModel) GetModuleFuncById(id string) (model.ModulesFuncs, error) {
-	var moduleFunc model.ModulesFuncs
+func (d *DatabaseModel) GetModuleFuncById(id string) (model.ModulesFunc, error) {
+	var moduleFunc model.ModulesFunc
 
 	sqlStatement := `SELECT * FROM public."ModuleFuncs" WHERE "UUID"=$1`
 
@@ -15,15 +15,15 @@ func (d *DatabaseModel) GetModuleFuncById(id string) (model.ModulesFuncs, error)
 		&moduleFunc.UUID,
 		&moduleFunc.ModuleFuncName,
 		&moduleFunc.ModuleFuncDesc,
-		&moduleFunc.NumOfParameters,
-		pq.Array(&moduleFunc.ParameterTypes),
-		pq.Array(&moduleFunc.ParameterNames),
+		&moduleFunc.NumOfParams,
+		pq.Array(&moduleFunc.ParamTypes),
+		pq.Array(&moduleFunc.ParamNames),
 	)
 
 	return moduleFunc, err
 }
 
-func (d *DatabaseModel) InsertModuleFunc(moduleFunc model.ModulesFuncs) (bool, error) {
+func (d *DatabaseModel) InsertModuleFunc(moduleFunc model.ModulesFunc) (bool, error) {
 	sqlStatement := `INSERT INTO public."ModuleFuncs"(
 		"UUID", "ModuleFuncName", "ModuleFuncDesc", "NumOfParameters", "ParameterTypes", "ParameterNames")
 		VALUES ($1, $2, $3, $4, $5, $6);`
@@ -34,9 +34,9 @@ func (d *DatabaseModel) InsertModuleFunc(moduleFunc model.ModulesFuncs) (bool, e
 		moduleFunc.UUID,
 		moduleFunc.ModuleFuncName,
 		moduleFunc.ModuleFuncDesc,
-		moduleFunc.NumOfParameters,
-		pq.Array(moduleFunc.ParameterTypes),
-		pq.Array(moduleFunc.ParameterNames))
+		moduleFunc.NumOfParams,
+		pq.Array(moduleFunc.ParamTypes),
+		pq.Array(moduleFunc.ParamNames))
 
 	if err != nil {
 		check = false

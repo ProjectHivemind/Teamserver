@@ -5,8 +5,8 @@ import (
 	"github.com/lib/pq"
 )
 
-func (d *DatabaseModel) AllModules() ([]model.Modules, error) {
-	var allModules []model.Modules
+func (d *DatabaseModel) AllModules() ([]model.Module, error) {
+	var allModules []model.Module
 
 	sqlStatement := `SELECT * FROM public."Modules"`
 
@@ -18,7 +18,7 @@ func (d *DatabaseModel) AllModules() ([]model.Modules, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var module model.Modules
+		var module model.Module
 
 		err = rows.Scan(
 			&module.ModuleName,
@@ -35,8 +35,8 @@ func (d *DatabaseModel) AllModules() ([]model.Modules, error) {
 	return allModules, nil
 }
 
-func (d *DatabaseModel) GetModuleByName(name string) (model.Modules, error) {
-	var module model.Modules
+func (d *DatabaseModel) GetModuleByName(name string) (model.Module, error) {
+	var module model.Module
 
 	sqlStatement := `SELECT * FROM public."Modules" WHERE "ModuleName"=$1`
 
@@ -50,7 +50,7 @@ func (d *DatabaseModel) GetModuleByName(name string) (model.Modules, error) {
 	return module, err
 }
 
-func (d *DatabaseModel) InsertModule(module model.Modules) (bool, error) {
+func (d *DatabaseModel) InsertModule(module model.Module) (bool, error) {
 	sqlStatement := `INSERT INTO public."Modules"(
 		"ModuleName", "ModuleDesc", "ModuleFuncIds")
 		VALUES ($1, $2, $3);`

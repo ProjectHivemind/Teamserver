@@ -27,67 +27,67 @@ const (
 // Data is one of the following structs
 type Packet struct {
 	Fingerprint string      `json:"fingerprint"`
-	Implant     ImplantInfo `json:"implantInfo"`
-	PacketType  int         `json:"packetType"`
-	NumLeft     int         `json:"numLeft"`
+	Implant     ImplantInfo `json:"implant_info"`
+	PacketType  int         `json:"packet_type"`
+	NumLeft     int         `json:"num_left"`
 	Data        string      `json:"data"`
 }
 
 // ImplantInfo is the information about the implant being sent
 type ImplantInfo struct {
-	UUID      string `json:"UUID"`
-	PrimaryIP string `json:"primaryIP"`
+	UUID      string `json:"uuid"`
+	PrimaryIP string `json:"primary_ip"`
 }
 
 // Action is the action that needs to be completed
 type Action struct {
-	ActionID   string `json:"actionId"`
+	ActionID   string `json:"action_id"`
 	Module     string `json:"module"`
-	ModuleFunc string `json:"moduleFunc"`
+	ModuleFunc string `json:"module_func"`
 	Arguments  string `json:"arguments"`
 }
 
 // ActionResponse is the implant's response to an action
 type ActionResponse struct {
-	ActionID string `json:"actionId"`
+	ActionID string `json:"action_id"`
 	Response string `json:"response"`
 }
 
 // RegistrationRequest has all the info needed for an implant to register
 type RegistrationRequest struct {
-	IP               string       `json:"IP"`
-	ImplantName      string       `json:"implantName"`
-	ImplantVersion   string       `json:"implantVersion"`
+	IP               string       `json:"ip"`
+	ImplantName      string       `json:"implant_name"`
+	ImplantVersion   string       `json:"implant_version"`
 	Hostname         string       `json:"hostname"`
-	MAC              string       `json:"MAC"`
-	OtherIPs         []string     `json:"otherips"`
-	OS               string       `json:"OS"`
-	SupportedModules []ModuleInfo `json:"supportedModules"`
+	MAC              string       `json:"mac"`
+	OtherIPs         []string     `json:"other_ips"`
+	OS               string       `json:"os"`
+	SupportedModules []ModuleInfo `json:"supported_modules"`
 }
 
 // RegistrationResponse gives the uuid to the bot
 type RegistrationResponse struct {
-	UUID string `json:"UUID"`
+	UUID string `json:"uuid"`
 }
 
 // ModuleInfo has the name of the module from the implant with funcs
 type ModuleInfo struct {
-	ModuleName  string           `json:"moduleName"`
-	ModuleDesc  string           `json:"moduleDesc"`
-	ModuleFuncs []ModuleFuncInfo `json:"moduleFuncs"`
+	ModuleName  string           `json:"module_name"`
+	ModuleDesc  string           `json:"module_desc"`
+	ModuleFuncs []ModuleFuncInfo `json:"module_funcs"`
 }
 
 // ModuleFuncInfo has all the information about a module function
 type ModuleFuncInfo struct {
-	ModuleFuncName string   `json:"moduleFuncName"`
-	ModuleFuncDesc string   `json:"moduleFuncDesc"`
-	ParamNum       int      `json:"paramNum"`
-	ParamNames     []string `json:"paramNames"`
-	ParamTypes     []string `json:"paramTypes"`
+	ModuleFuncName string   `json:"module_func_name"`
+	ModuleFuncDesc string   `json:"module_func_desc"`
+	ParamNum       int      `json:"param_num"`
+	ParamNames     []string `json:"param_names"`
+	ParamTypes     []string `json:"param_types"`
 }
 
 // ComError is an error for the action
 type ComError struct {
-	ActionID string `json:"actionId"`
-	ErrorNum int    `json:"errorNum"`
+	ActionID string `json:"action_id"`
+	ErrorNum int    `json:"error_num"`
 }

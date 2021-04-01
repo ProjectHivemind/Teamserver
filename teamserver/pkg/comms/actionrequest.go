@@ -29,6 +29,7 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 		return nil, err
 	}
 
+	// If there are not actions, send nothing
 	if len(stagedActions) == 0 {
 		packet := Packet{
 			Fingerprint: "fingerprint",
@@ -64,10 +65,11 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 
 		// MOVE STAGED TO EXECUTED HERE
 		d.DeleteStagedAction(stagedActions[i].Id)
-		executed := model.ExecutedActions{
-			Id:           stagedActions[i].Id,
-			UUIDofAction: stagedActions[i].UUIDofAction,
-			TimeSent:     time.Now().Format(crud.TimeStamp),
+		executed := model.ExecutedAction{
+			Id:            stagedActions[i].Id,
+			UUIDofImplant: stagedActions[i].UUIDofImplant,
+			UUIDofAction:  stagedActions[i].UUIDofAction,
+			TimeSent:      time.Now().Format(crud.TimeStamp),
 		}
 		d.InsertExecutedAction(executed)
 	}
@@ -76,9 +78,8 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 }
 
 // generateAction given a staged action, it will return a sendable action Packet
-func generateAction(stagedAction model.StagedActions) (Action, error) {
+func generateAction(stagedAction model.StagedAction) (Action, error) {
 	var action Action
-	args := make(map[string]string, 0)
 
 	// Get the StoredAction from the database
 	storedAction, err := d.GetStoredActionById(stagedAction.UUIDofAction)
@@ -87,36 +88,25 @@ func generateAction(stagedAction model.StagedActions) (Action, error) {
 	}
 
 	// Get the Module that is being called
-	module, err := d.GetModuleByName(storedAction.ModuleFunc)
+	module, err := d.GetModuleByName(storedAction.ModuleToRun)
 	if err != nil {
 		return action, fmt.Errorf("unknown module")
 	}
 
-	// Gets the ModuleFunc values needed
-	var argStr []string
+	// Checks the modulefunc is there
+	// TODO: Decide if this should be taken out.
 	for i := 0; i < len(module.ModuleFuncIds); i++ {
-		moduleFunc, err := d.GetModuleFuncById(module.ModuleFuncIds[i])
+		_, err := d.GetModuleFuncById(module.ModuleFuncIds[i])
 		if err != nil {
 			return action, fmt.Errorf("unknown modulefunc")
 		}
-
-		if moduleFunc.ModuleFuncName == storedAction.ModuleFunc {
-			argStr = moduleFunc.ParameterNames
-			break
-		}
 	}
-
-	// Puts them in a map and Marshals it to json
-	for i := 0; i < len(argStr); i++ {
-		args[argStr[i]] = storedAction.Arguments[i]
-	}
-	bytes, _ := json.Marshal(args)
 
 	action = Action{
 		ActionID:   stagedAction.Id,
 		Module:     storedAction.ModuleToRun,
 		ModuleFunc: storedAction.ModuleFunc,
-		Arguments:  string(bytes),
+		Arguments:  storedAction.Arguments,
 	}
 
 	return action, nil

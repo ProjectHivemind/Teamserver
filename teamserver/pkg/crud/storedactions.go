@@ -2,11 +2,10 @@ package crud
 
 import (
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
-	"github.com/lib/pq"
 )
 
-func (d *DatabaseModel) AllStoredActions() ([]model.StoredActions, error) {
-	var allStoredActions []model.StoredActions
+func (d *DatabaseModel) AllStoredActions() ([]model.StoredAction, error) {
+	var allStoredActions []model.StoredAction
 
 	sqlStatement := `SELECT * FROM public."StoredActions"`
 
@@ -18,13 +17,14 @@ func (d *DatabaseModel) AllStoredActions() ([]model.StoredActions, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var storedAction model.StoredActions
+		var storedAction model.StoredAction
 
 		err = rows.Scan(
 			&storedAction.UUID,
+			&storedAction.Name,
 			&storedAction.ModuleToRun,
 			&storedAction.ModuleFunc,
-			pq.Array(&storedAction.Arguments),
+			&storedAction.Arguments,
 		)
 		if err != nil {
 			return nil, err
@@ -36,34 +36,36 @@ func (d *DatabaseModel) AllStoredActions() ([]model.StoredActions, error) {
 	return allStoredActions, nil
 }
 
-func (d *DatabaseModel) GetStoredActionById(id string) (model.StoredActions, error) {
-	var storedAction model.StoredActions
+func (d *DatabaseModel) GetStoredActionById(id string) (model.StoredAction, error) {
+	var storedAction model.StoredAction
 
 	sqlStatement := `SELECT * FROM public."StoredActions" WHERE "UUID"=$1`
 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
 		&storedAction.UUID,
+		&storedAction.Name,
 		&storedAction.ModuleToRun,
 		&storedAction.ModuleFunc,
-		pq.Array(&storedAction.Arguments),
+		&storedAction.Arguments,
 	)
 
 	return storedAction, err
 }
 
-func (d *DatabaseModel) InsertStoredAction(storedAction model.StoredActions) (bool, error) {
+func (d *DatabaseModel) InsertStoredAction(storedAction model.StoredAction) (bool, error) {
 	sqlStatement := `INSERT INTO public."StoredActions"(
-		"UUID", "ModuleToRun", "ModuleFunc", "Arguments")
-		VALUES ($1, $2, $3, $4);`
+		"UUID", "Name", "ModuleToRun", "ModuleFunc", "Arguments")
+		VALUES ($1, $2, $3, $4, $5);`
 
 	check := true
 
 	_, err := d.db.Exec(sqlStatement,
 		storedAction.UUID,
+		storedAction.Name,
 		storedAction.ModuleToRun,
 		storedAction.ModuleFunc,
-		pq.Array(storedAction.Arguments))
+		storedAction.Arguments)
 
 	if err != nil {
 		check = false
