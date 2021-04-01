@@ -1,7 +1,9 @@
 package tcp
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"net"
 
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/comms"
@@ -40,8 +42,14 @@ func StartListener(port string) {
 
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
-	msg := make([]byte, 25000) // Needs to be able to accept large registrations, may need to be bigger or done differently
-	n, _ := conn.Read(msg)
+	msg := make([]byte, 5000) // Needs to be able to accept large registrations, may need to be bigger or done differently
+	reader := bufio.NewReader(conn)
+	n, err := io.ReadFull(reader, msg)
+	if err != nil {
+		if err != io.EOF && err != io.ErrUnexpectedEOF {
+			fmt.Println("Read error:", err)
+		}
+	}
 
 	bytes, err := comms.HandleMessage(msg[:n], db)
 	if err != nil {
