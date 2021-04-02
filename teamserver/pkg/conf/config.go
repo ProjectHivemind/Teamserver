@@ -10,6 +10,7 @@ import (
 type ConfOptions struct {
 	Database  map[string]string              `yaml:"database"`
 	Restapi   map[string]string              `yaml:"restapi"`
+	Users     []map[string]string            `yaml:"users"`
 	Listeners []map[string]map[string]string `yaml:"listeners"`
 }
 

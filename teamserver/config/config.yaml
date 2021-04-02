@@ -2,7 +2,7 @@
 # The teamserver uses this config file to get up listeners and ports
 
 database:
-  uri: "postgres"
+  uri: "localhost"
   port: "5432"
   dbuser: "hivemind"
   password: "changeme123"
@@ -10,6 +10,16 @@ database:
 
 restapi:
   port: "4321"
+
+# Users to be added to the database at startup
+# Permissions:
+#   1 = admin
+#   2 = redteam operator
+#   3 = spectator
+users:
+  - username: admin
+    password: admin
+    permission: "1"
 
 # For more than one of the same type of listener on a different port, just add one
 # as the example commented out below does
