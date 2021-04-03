@@ -58,9 +58,11 @@ type Group struct {
 
 type StagedAction struct {
 	Id            string `json:"id"`
+	Stager        string `json:"stager"`
 	UUIDofAction  string `json:"uuid_of_action"`
 	UUIDofImplant string `json:"uuid_of_implant"`
 	TimeStaged    string `json:"time_staged"`
+	TimeToRun     string `json:"time_to_run"`
 }
 
 type StagedActionsFrontend struct {
@@ -79,6 +81,7 @@ type StoredAction struct {
 
 type ExecutedAction struct {
 	Id             string `json:"id"`
+	Stager         string `json:"stager"`
 	UUIDofImplant  string `json:"uuid_of_implant"`
 	UUIDofAction   string `json:"uuid_of_action"`
 	TimeSent       string `json:"time_sent"`

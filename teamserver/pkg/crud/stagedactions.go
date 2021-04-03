@@ -22,9 +22,11 @@ func (d *DatabaseModel) AllStagedActions() ([]model.StagedAction, error) {
 
 		err = rows.Scan(
 			&stagedAction.Id,
+			&stagedAction.Stager,
 			&stagedAction.UUIDofAction,
 			&stagedAction.UUIDofImplant,
 			&stagedAction.TimeStaged,
+			&stagedAction.TimeToRun,
 		)
 		if err != nil {
 			return nil, err
@@ -53,9 +55,11 @@ func (d *DatabaseModel) AllStagedActionsFrontend() ([]model.StagedActionsFronten
 
 		err = rows.Scan(
 			&stagedAction.StagedAction.Id,
+			&stagedAction.StagedAction.Stager,
 			&stagedAction.StagedAction.UUIDofAction,
 			&stagedAction.StagedAction.UUIDofImplant,
 			&stagedAction.StagedAction.TimeStaged,
+			&stagedAction.StagedAction.TimeToRun,
 			&stagedAction.Implant.UUID,
 			&stagedAction.Implant.UUIDImplantType,
 			&stagedAction.Implant.PrimaryIP,
@@ -87,9 +91,11 @@ func (d *DatabaseModel) GetStagedActionById(id string) (model.StagedAction, erro
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
 		&stagedAction.Id,
+		&stagedAction.Stager,
 		&stagedAction.UUIDofAction,
 		&stagedAction.UUIDofImplant,
 		&stagedAction.TimeStaged,
+		&stagedAction.TimeToRun,
 	)
 
 	return stagedAction, err
@@ -112,9 +118,11 @@ func (d *DatabaseModel) GetStagedActionByImplant(id string) ([]model.StagedActio
 
 		err = rows.Scan(
 			&stagedAction.Id,
+			&stagedAction.Stager,
 			&stagedAction.UUIDofAction,
 			&stagedAction.UUIDofImplant,
 			&stagedAction.TimeStaged,
+			&stagedAction.TimeToRun,
 		)
 		if err != nil {
 			return nil, err
@@ -128,8 +136,8 @@ func (d *DatabaseModel) GetStagedActionByImplant(id string) ([]model.StagedActio
 
 func (d *DatabaseModel) InsertStagedAction(stagedAction model.StagedAction) (bool, error) {
 	sqlStatement := `INSERT INTO public."StagedActions"(
-		"id", "UUIDofAction", "UUIDofImplant", "TimeStaged")
-		VALUES ($1, $2, $3, $4);`
+		"id", "Stager", "UUIDofAction", "UUIDofImplant", "TimeStaged", "TimeToRun")
+		VALUES ($1, $2, $3, $4, $5, $6);`
 
 	check := true
 
@@ -140,9 +148,11 @@ func (d *DatabaseModel) InsertStagedAction(stagedAction model.StagedAction) (boo
 
 	_, err = d.db.Exec(sqlStatement,
 		stagedAction.Id,
+		stagedAction.Stager,
 		stagedAction.UUIDofAction,
 		stagedAction.UUIDofImplant,
-		stagedAction.TimeStaged)
+		stagedAction.TimeStaged,
+		stagedAction.TimeToRun)
 
 	if err != nil {
 		check = false

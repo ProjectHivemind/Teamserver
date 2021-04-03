@@ -39,6 +39,7 @@ ALTER TABLE public."CallBack" OWNER TO hivemind;
 
 CREATE TABLE public."ExecutedActions" (
     id text NOT NULL,
+    "Stager" text NOT NULL,
     "UUIDofImplant" text NOT NULL,
     "UUIDofAction" text NOT NULL,
     "TimeSent" text NOT NULL,
@@ -168,9 +169,11 @@ ALTER TABLE public."Sessions" OWNER TO hivemind;
 
 CREATE TABLE public."StagedActions" (
     id text NOT NULL,
+    "Stager" text NOT NULL,
     "UUIDofAction" text NOT NULL,
     "UUIDofImplant" text NOT NULL,
-    "TimeStaged" text NOT NULL
+    "TimeStaged" text NOT NULL,
+    "TimeToSend" text
 );
 
 
@@ -275,7 +278,7 @@ COPY public."Sessions" ("SessionToken", "Username", "ExpTime") FROM stdin;
 -- Data for Name: StagedActions; Type: TABLE DATA; Schema: public; Owner: hivemind
 --
 
-COPY public."StagedActions" (id, "UUIDofAction", "UUIDofImplant", "TimeStaged") FROM stdin;
+COPY public."StagedActions" (id, "Stager", "UUIDofAction", "UUIDofImplant", "TimeStaged", "TimeToSend") FROM stdin;
 \.
 
 
@@ -414,6 +417,12 @@ ALTER TABLE ONLY public."StagedActions"
 ALTER TABLE ONLY public."StagedActions"
     ADD CONSTRAINT storedaction_fk FOREIGN KEY ("UUIDofAction") REFERENCES public."StoredActions"("UUID");
 
+--
+-- Name: StagedActions operator_fk; Type: FK CONSTRAINT; Schema: public; Owner: hivemind
+--
+
+ALTER TABLE ONLY public."StagedActions"
+    ADD CONSTRAINT operator_fk FOREIGN KEY ("Stager") REFERENCES public."Operators"("Username");
 
 --
 -- Name: ExecutedActions storedactions_fk; Type: FK CONSTRAINT; Schema: public; Owner: hivemind
@@ -428,6 +437,14 @@ ALTER TABLE ONLY public."ExecutedActions"
 
 ALTER TABLE ONLY public."ExecutedActions"
     ADD CONSTRAINT implant_fk FOREIGN KEY ("UUIDofImplant") REFERENCES public."Implant"("UUID") NOT VALID;
+
+--
+-- Name: ExecutedActions operator_fk; Type: FK CONSTRAINT; Schema: public; Owner: hivemind
+--
+
+ALTER TABLE ONLY public."ExecutedActions"
+    ADD CONSTRAINT operator_fk FOREIGN KEY ("Stager") REFERENCES public."Operators"("Username") NOT VALID;
+
 
 --
 -- Name: Implant uuid_fk; Type: FK CONSTRAINT; Schema: public; Owner: hivemind

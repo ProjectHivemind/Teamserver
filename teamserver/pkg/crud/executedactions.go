@@ -22,6 +22,7 @@ func (d *DatabaseModel) AllExecutedActions() ([]model.ExecutedAction, error) {
 
 		err = rows.Scan(
 			&executedAction.Id,
+			&executedAction.Stager,
 			&executedAction.UUIDofImplant,
 			&executedAction.UUIDofAction,
 			&executedAction.TimeSent,
@@ -56,6 +57,7 @@ func (d *DatabaseModel) AllExecutedActionsFrontend() ([]model.ExecutedActionsFro
 
 		err = rows.Scan(
 			&executedAction.ExecutedAction.Id,
+			&executedAction.ExecutedAction.Stager,
 			&executedAction.ExecutedAction.UUIDofImplant,
 			&executedAction.ExecutedAction.UUIDofAction,
 			&executedAction.ExecutedAction.TimeSent,
@@ -92,6 +94,7 @@ func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedAction, 
 	row := d.db.QueryRow(sqlStatement, id)
 	err := row.Scan(
 		&executedAction.Id,
+		&executedAction.Stager,
 		&executedAction.UUIDofImplant,
 		&executedAction.UUIDofAction,
 		&executedAction.TimeSent,
@@ -105,13 +108,14 @@ func (d *DatabaseModel) GetExecutedActionById(id string) (model.ExecutedAction, 
 
 func (d *DatabaseModel) InsertExecutedAction(executedAction model.ExecutedAction) (bool, error) {
 	sqlStatement := `INSERT INTO public."ExecutedActions"(
-		id, "UUIDofImplant", "UUIDofAction", "TimeSent", "TimeRan", "Successful", "ActionResponse")
-		VALUES ($1, $2, $3, $4, $5, $6, $7);`
+		id, "Stager", "UUIDofImplant", "UUIDofAction", "TimeSent", "TimeRan", "Successful", "ActionResponse")
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`
 
 	check := true
 
 	_, err := d.db.Exec(sqlStatement,
 		executedAction.Id,
+		executedAction.Stager,
 		executedAction.UUIDofImplant,
 		executedAction.UUIDofAction,
 		executedAction.TimeSent,
