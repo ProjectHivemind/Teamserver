@@ -9,6 +9,7 @@ import (
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/listeners/tcp"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/plugins"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/rest"
 )
 
@@ -50,6 +51,23 @@ func main() {
 			case "tcp":
 				if v["enabled"] == "true" {
 					go tcp.StartListener(v["port"])
+				}
+			default:
+				break
+			}
+		}
+	}
+
+	// Starts any plugins
+	for _, val := range configOptions.Plugins {
+		for k, v := range val {
+			switch k {
+			case "pwnboard":
+				if v["enabled"] == "true" {
+					plugins.SetPwnboardConfig(true, v["url"], v["port"])
+				}
+			case "sawmill":
+				if v["enabled"] == "true" {
 				}
 			default:
 				break
