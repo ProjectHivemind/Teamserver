@@ -66,9 +66,6 @@ func main() {
 				if v["enabled"] == "true" {
 					plugins.SetPwnboardConfig(true, v["url"], v["port"])
 				}
-			case "sawmill":
-				if v["enabled"] == "true" {
-				}
 			default:
 				break
 			}
