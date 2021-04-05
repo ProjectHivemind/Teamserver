@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-var ENABLED bool = false
+var PWNBOARD_ENABLED bool = false
 var PWNBOARD_URL string = "http://pwnboard.win"
 var PWNBOARD_PORT string = "80"
 
@@ -17,14 +17,14 @@ type PwnBoard struct {
 }
 
 func SetPwnboardConfig(enabled bool, url, port string) {
-	ENABLED = enabled
+	PWNBOARD_ENABLED = enabled
 	PWNBOARD_URL = url
 	PWNBOARD_PORT = port
 }
 
 func UpdatepwnBoard(ip, implantName string) {
 	// Returns if it isn't enabled.
-	if !ENABLED {
+	if !PWNBOARD_ENABLED {
 		return
 	}
 

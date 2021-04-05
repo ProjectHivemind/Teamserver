@@ -27,9 +27,11 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 	}
 
 	// -------- This is for the pwnboard and sawmill plugins ----------
-	implant, _ := d.GetImplantById(packet.Implant.UUID)
-	implantType, _ := d.GetImplantTypeById(implant.UUIDImplantType)
-	plugins.UpdatepwnBoard(packet.Implant.PrimaryIP, implantType.ImplantName+"-"+implantType.ImplantVersion)
+	if plugins.PWNBOARD_ENABLED {
+		implant, _ := d.GetImplantById(packet.Implant.UUID)
+		implantType, _ := d.GetImplantTypeById(implant.UUIDImplantType)
+		plugins.UpdatepwnBoard(packet.Implant.PrimaryIP, implantType.ImplantName+"-"+implantType.ImplantVersion)
+	}
 	// -----------------------------------------------------------------
 
 	stagedActions, err := d.GetStagedActionByImplant(packet.Implant.UUID)
