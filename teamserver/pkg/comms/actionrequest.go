@@ -26,11 +26,12 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 		return nil, fmt.Errorf("not registered")
 	}
 
-	// -------- This is for the pwnboard and sawmill plugins ----------
+	// -------------- This is for the pwnboard plugin ------------------
+	// -------- This is not needed for core functionality --------------
 	if plugins.PWNBOARD_ENABLED {
 		implant, _ := d.GetImplantById(packet.Implant.UUID)
 		implantType, _ := d.GetImplantTypeById(implant.UUIDImplantType)
-		plugins.UpdatepwnBoard(packet.Implant.PrimaryIP, implantType.ImplantName+"-"+implantType.ImplantVersion)
+		plugins.UpdatepwnBoard(packet.Implant.PrimaryIP, implantType.ImplantName)
 	}
 	// -----------------------------------------------------------------
 

@@ -30,7 +30,7 @@ func UpdatepwnBoard(ip, implantName string) {
 
 	// Create the struct
 	data := PwnBoard{
-		IPs:  "172.16.3.22",
+		IPs:  ip,
 		Type: implantName,
 	}
 

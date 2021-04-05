@@ -26,11 +26,7 @@ plugins:
       enabled: "false"
       url: "http://pwnboard.win"
       port: "80"
-  - sawmill:
-      enabled: "false"
-      url: "http://logs.pwnboard.win"
-      port: "5000"
-
+      
 # For more than one of the same type of listener on a different port, just add one
 # as the example commented out below does
 listeners:
