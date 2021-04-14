@@ -9,8 +9,7 @@ import (
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 )
 
-// ActionRequestHandler checks to see if there are any actions queued for the
-// given implant.
+// ActionRequestHandler checks to see if there are any actions queued for the given implant.
 func ActionRequestHandler(packet Packet) ([]Packet, error) {
 	var allPackets []Packet
 
@@ -60,7 +59,6 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 			Data:        string(bytes),
 		}
 
-		// packetCtr--
 		allPackets = append(allPackets, actionPacket)
 
 		// MOVE STAGED TO EXECUTED HERE

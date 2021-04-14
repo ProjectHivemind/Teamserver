@@ -7,8 +7,7 @@ import (
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 )
 
-// ActionResponseHandler updates the database with any responses from the
-// implant's action
+// ActionResponseHandler updates the database with any responses from the implant's action
 func ActionResponseHandler(packet Packet) ([]Packet, error) {
 	var allPackets []Packet
 	actionResp := ActionResponse{}
