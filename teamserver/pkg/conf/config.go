@@ -12,6 +12,7 @@ type ConfOptions struct {
 	Database  map[string]string              `yaml:"database"`
 	Restapi   map[string]string              `yaml:"restapi"`
 	Users     []map[string]string            `yaml:"users"`
+	Plugins   []map[string]map[string]string `yaml:"plugins"`
 	Listeners []map[string]map[string]string `yaml:"listeners"`
 }
 

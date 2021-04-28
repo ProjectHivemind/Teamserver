@@ -7,6 +7,7 @@ import (
 
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/plugins"
 )
 
 // ActionRequestHandler checks to see if there are any actions queued for the given implant.
@@ -18,10 +19,20 @@ func ActionRequestHandler(packet Packet) ([]Packet, error) {
 		return nil, fmt.Errorf("not registered")
 	}
 
+	// Update that the implant called back
 	_, err := d.UpdateCallBackTime(packet.Implant.UUID, time.Now().Format(crud.TimeStamp))
 	if err != nil {
 		return nil, fmt.Errorf("not registered")
 	}
+
+	// -------------- This is for the pwnboard plugin ------------------
+	// -------- This is not needed for core functionality --------------
+	if plugins.PWNBOARD_ENABLED {
+		implant, _ := d.GetImplantById(packet.Implant.UUID)
+		implantType, _ := d.GetImplantTypeById(implant.UUIDImplantType)
+		plugins.UpdatepwnBoard(packet.Implant.PrimaryIP, implantType.ImplantName)
+	}
+	// -----------------------------------------------------------------
 
 	stagedActions, err := d.GetStagedActionByImplant(packet.Implant.UUID)
 	if err != nil {

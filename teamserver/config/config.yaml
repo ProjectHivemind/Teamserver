@@ -2,7 +2,7 @@
 # The teamserver uses this config file to get up listeners and ports
 
 database:
-  uri: "localhost"
+  uri: "postgres"
   port: "5432"
   dbuser: "hivemind"
   password: "changeme123"
@@ -21,6 +21,12 @@ users:
     password: admin
     permission: "1"
 
+plugins:
+  - pwnboard:
+      enabled: "false"
+      url: "http://pwnboard.win"
+      port: "80"
+      
 # For more than one of the same type of listener on a different port, just add one
 # as the example commented out below does
 listeners:
