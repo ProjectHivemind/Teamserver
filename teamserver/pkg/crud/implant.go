@@ -201,9 +201,9 @@ func (d *DatabaseModel) GetImplantsWithCallbacks() ([]model.ImplantWithCallback,
 			&implant.CallBack.FirstCall,
 			&implant.CallBack.UUIDImplant,
 			&implant.CallBack.LastCall,
+			&implant.ImplantType.UUID,
 			&implant.ImplantType.ImplantName,
 			&implant.ImplantType.ImplantVersion,
-			&implant.ImplantType.UUID,
 		)
 		if err != nil {
 			return nil, err
