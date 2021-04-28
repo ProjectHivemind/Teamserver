@@ -8,6 +8,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// Default variables for connecting to the database
 var HOST string = "localhost"
 var PORT string = "5432"
 var USER string = "hivemind"
@@ -17,10 +18,12 @@ var SSLMODE string = "disabled"
 
 const TimeStamp = time.Stamp
 
+// DatabaseModel holds the database connection object
 type DatabaseModel struct {
 	db *sql.DB
 }
 
+// SetDatabaseOptions is a setter for allowing the database options to be changed.
 func SetDatabaseOptions(host, port, user, password, sslMode string) {
 	HOST = host
 	PORT = port
@@ -29,6 +32,7 @@ func SetDatabaseOptions(host, port, user, password, sslMode string) {
 	SSLMODE = sslMode
 }
 
+// Open creates the database connection
 func (d *DatabaseModel) Open() {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=%s",
@@ -46,6 +50,7 @@ func (d *DatabaseModel) Open() {
 	}
 }
 
+// Close ends the database connection
 func (d *DatabaseModel) Close() {
 	d.db.Close()
 }

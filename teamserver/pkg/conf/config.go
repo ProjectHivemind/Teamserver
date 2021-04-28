@@ -7,6 +7,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// ConfOptions reads all conf data.
 type ConfOptions struct {
 	Database  map[string]string              `yaml:"database"`
 	Restapi   map[string]string              `yaml:"restapi"`
@@ -14,6 +15,7 @@ type ConfOptions struct {
 	Listeners []map[string]map[string]string `yaml:"listeners"`
 }
 
+// GetConf pulls the data from the config.yaml
 func (c *ConfOptions) GetConf(path string) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {

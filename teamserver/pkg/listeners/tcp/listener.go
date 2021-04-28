@@ -40,6 +40,7 @@ func StartListener(port string) {
 	}
 }
 
+// handleConnection is used to handle the TCP connection.
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
 	msg := make([]byte, 5000) // Needs to be able to accept large registrations, may need to be bigger or done differently
