@@ -7,6 +7,7 @@ import (
 
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/conf"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/listeners/simplehttp"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/listeners/tcp"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/plugins"
@@ -14,11 +15,12 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("missing argument: need path to config file")
-		os.Exit(1)
-	}
-	configFilePath := os.Args[1]
+	// if len(os.Args) != 2 {
+	// 	fmt.Println("missing argument: need path to config file")
+	// 	os.Exit(1)
+	// }
+	// configFilePath := os.Args[1]
+	configFilePath := "../../config/config.yaml"
 
 	// Reads the config file
 	var configOptions conf.ConfOptions
@@ -26,10 +28,16 @@ func main() {
 
 	// Sets the database parameters
 	m := configOptions.Database
+	if m == nil {
+		fmt.Println("there was a problem connecting to the database")
+		os.Exit(1)
+	}
 	crud.SetDatabaseOptions(m["uri"], m["port"], m["dbuser"], m["password"], m["sslmode"])
 
 	var db crud.DatabaseModel
 	db.Open()
+
+	// Adds the configured users
 	for _, val := range configOptions.Users {
 		permission, err := strconv.Atoi(val["permission"])
 		if err != nil {
@@ -51,6 +59,10 @@ func main() {
 			case "tcp":
 				if v["enabled"] == "true" {
 					go tcp.StartListener(v["port"])
+				}
+			case "simplehttp":
+				if v["enabled"] == "true" {
+					go simplehttp.StartListener(v["port"])
 				}
 			default:
 				break
