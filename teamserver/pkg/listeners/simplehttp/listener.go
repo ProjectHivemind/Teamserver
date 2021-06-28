@@ -13,15 +13,15 @@ import (
 var db crud.DatabaseModel
 
 // StartListener start a tcp listening channel on that port
-func StartListener(port string) {
+func StartListener(port, url string) {
 
 	// Connect to the database for this listener
 	db.Open()
 	defer db.Close()
 
-	http.HandleFunc("/simplehttp", handleConnection)
+	http.HandleFunc(url, handleConnection)
 
-	fmt.Printf("Starting SimpleHTTP listener on 0.0.0.0:%s\n", port)
+	fmt.Printf("Starting SimpleHTTP listener on http://0.0.0.0:%s%s\n", port, url)
 	http.ListenAndServe(":"+port, nil)
 }
 

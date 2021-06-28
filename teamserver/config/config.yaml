@@ -36,9 +36,11 @@ listeners:
   - simplehttp:
       enabled: "false"
       port: "1235"
+      url: "/simplehttp"
   - simplehttps:
       enabled: "false"
       port: "1236"
+      url: "/simplehttps"
       # These must be absolute paths or it might not detect the files
       crtFile: "<.crt path>"
       keyFile: "<.key path>"

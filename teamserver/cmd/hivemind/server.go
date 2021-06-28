@@ -62,11 +62,11 @@ func main() {
 				}
 			case "simplehttp":
 				if v["enabled"] == "true" {
-					go simplehttp.StartListener(v["port"])
+					go simplehttp.StartListener(v["port"], v["url"])
 				}
 			case "simplehttps":
 				if v["enabled"] == "true" {
-					go simplehttps.StartListener(v["port"], v["crtFile"], v["keyFile"])
+					go simplehttps.StartListener(v["port"], v["url"], v["crtFile"], v["keyFile"])
 				}
 			}
 		}
