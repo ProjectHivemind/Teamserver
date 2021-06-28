@@ -2,7 +2,7 @@
 # The teamserver uses this config file to get up listeners and ports
 
 database:
-  uri: "postgres"
+  uri: "localhost"
   port: "5432"
   dbuser: "hivemind"
   password: "changeme123"
@@ -33,6 +33,17 @@ listeners:
   - tcp:
       enabled: "true"
       port: "1234"
+  - simplehttp:
+      enabled: "false"
+      port: "1235"
+      url: "/simplehttp"
+  - simplehttps:
+      enabled: "false"
+      port: "1236"
+      url: "/simplehttps"
+      # These must be absolute paths or it might not detect the files
+      crtFile: "<.crt path>"
+      keyFile: "<.key path>"
   # Example of adding another TCP listener on a different port
   # - tcp:
   #     enabled: "true"

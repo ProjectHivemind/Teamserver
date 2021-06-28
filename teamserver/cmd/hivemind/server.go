@@ -7,6 +7,8 @@ import (
 
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/conf"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/listeners/simplehttp"
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/listeners/simplehttps"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/listeners/tcp"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/plugins"
@@ -26,10 +28,16 @@ func main() {
 
 	// Sets the database parameters
 	m := configOptions.Database
+	if m == nil {
+		fmt.Println("there was a problem connecting to the database")
+		os.Exit(1)
+	}
 	crud.SetDatabaseOptions(m["uri"], m["port"], m["dbuser"], m["password"], m["sslmode"])
 
 	var db crud.DatabaseModel
 	db.Open()
+
+	// Adds the configured users
 	for _, val := range configOptions.Users {
 		permission, err := strconv.Atoi(val["permission"])
 		if err != nil {
@@ -52,8 +60,14 @@ func main() {
 				if v["enabled"] == "true" {
 					go tcp.StartListener(v["port"])
 				}
-			default:
-				break
+			case "simplehttp":
+				if v["enabled"] == "true" {
+					go simplehttp.StartListener(v["port"], v["url"])
+				}
+			case "simplehttps":
+				if v["enabled"] == "true" {
+					go simplehttps.StartListener(v["port"], v["url"], v["crtFile"], v["keyFile"])
+				}
 			}
 		}
 	}
