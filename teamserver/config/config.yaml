@@ -34,8 +34,14 @@ listeners:
       enabled: "true"
       port: "1234"
   - simplehttp:
-      enabled: "true"
+      enabled: "false"
       port: "1235"
+  - simplehttps:
+      enabled: "false"
+      port: "1236"
+      # These must be absolute paths or it might not detect the files
+      crtFile: "<.crt path>"
+      keyFile: "<.key path>"
   # Example of adding another TCP listener on a different port
   # - tcp:
   #     enabled: "true"

@@ -1,5 +1,5 @@
-// simplehttp package
-package simplehttp
+// simplehttps package
+package simplehttps
 
 import (
 	"fmt"
@@ -13,16 +13,16 @@ import (
 var db crud.DatabaseModel
 
 // StartListener start a tcp listening channel on that port
-func StartListener(port string) {
+func StartListener(port, crtPath, keyPath string) {
 
 	// Connect to the database for this listener
 	db.Open()
 	defer db.Close()
 
-	http.HandleFunc("/simplehttp", handleConnection)
+	http.HandleFunc("/simplehttps", handleConnection)
 
-	fmt.Printf("Starting SimpleHTTP listener on 0.0.0.0:%s\n", port)
-	http.ListenAndServe(":"+port, nil)
+	fmt.Printf("Starting SimpleHTTPS listener on 0.0.0.0:%s\n", port)
+	http.ListenAndServeTLS(":"+port, crtPath, keyPath, nil)
 }
 
 // handleConnection handles any of the HTTP connections

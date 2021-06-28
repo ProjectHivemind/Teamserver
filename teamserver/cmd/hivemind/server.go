@@ -8,6 +8,7 @@ import (
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/conf"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/crud"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/listeners/simplehttp"
+	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/listeners/simplehttps"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/listeners/tcp"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/model"
 	"github.com/ProjectHivemind/Teamserver/teamserver/pkg/plugins"
@@ -15,12 +16,11 @@ import (
 )
 
 func main() {
-	// if len(os.Args) != 2 {
-	// 	fmt.Println("missing argument: need path to config file")
-	// 	os.Exit(1)
-	// }
-	// configFilePath := os.Args[1]
-	configFilePath := "../../config/config.yaml"
+	if len(os.Args) != 2 {
+		fmt.Println("missing argument: need path to config file")
+		os.Exit(1)
+	}
+	configFilePath := os.Args[1]
 
 	// Reads the config file
 	var configOptions conf.ConfOptions
@@ -64,8 +64,10 @@ func main() {
 				if v["enabled"] == "true" {
 					go simplehttp.StartListener(v["port"])
 				}
-			default:
-				break
+			case "simplehttps":
+				if v["enabled"] == "true" {
+					go simplehttps.StartListener(v["port"], v["crtFile"], v["keyFile"])
+				}
 			}
 		}
 	}
